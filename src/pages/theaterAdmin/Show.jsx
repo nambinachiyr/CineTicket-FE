@@ -102,7 +102,7 @@ const Show = () => {
                                             {
                                                 s?.bookedSeats>0 ?
                                                 <p><span>showStatus :</span>
-                                                 <select value={editData?.showStatus} onChange={(e)=>setEditData({...editData,showStatus:e.target.value})}>
+                                                 <select value={editData?.showStatus } onChange={(e)=>setEditData({...editData,showStatus:e.target.value})}>
                                                     <option value="YetToStart">YetToStart</option>
                                                     <option value="Started">Started</option>
                                                     <option value="Completed">Completed</option>
@@ -113,7 +113,7 @@ const Show = () => {
                                         <div className='flex flex-col gap-3'>
                                             <h1><span>ScreenName: </span>
                                                 <select className='border w-full focus:outline-none border-gray-600 px-2 text-yellow-700 py-1' type="text"
-                                                    value={editData?.screen?._id || ''}
+                                                    value={editData?.screen?._id || s?.screen?._id}
                                                     onChange={(e) => {
                                                         const selectedScreen = screens.find(
                                                             screen => {
