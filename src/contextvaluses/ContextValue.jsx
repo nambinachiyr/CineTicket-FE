@@ -37,17 +37,25 @@ const ContextProvider = ({ children }) => {
 
   useEffect(()=>{
     async function state(){
-      const name = 'tamilnadu'
+      try{
+        const name = 'tamilnadu'
       const response = await stateInstance.get(`/stateName/${name}`)
       console.log(response?.data)
       return setContextState(response?.data?.state)
+      }catch(err){
+        console.log("State Error in Context",err.response?.data?.message)
+      }
     }
 
     async function city(){
-      const name = 'chennai'
+      try{
+        const name = 'chennai'
       const response = await CityInstance.get(`/cityName/${name}`)
       console.log(response?.data)
       return setContextCity(response?.data?.city)
+      }catch(err){
+        console.log("City Error in Context ",err.response?.data?.message)
+      }
     }
     state()
     city()
