@@ -50,7 +50,9 @@ const Footer = () => {
 
   async function handleTheaterAdmins(){
        
-          isAdmin??navi('/theater-admin/login')
+          if(isAdmin){
+            navi('/theater-admin/login')
+          }
 
   }
   return (
@@ -65,7 +67,7 @@ const Footer = () => {
       <div className='grid grid-cols-2  gap-3 justify-items-center md:grid-cols-3 lg:grid-cols-5 font-semibold'>
         <Link to={'/'} className='hover:text-yellow-500 hover:scale-105 transition-all duration-300'>Home</Link>
         <Link className='hover:text-yellow-500 hover:scale-103 transition-all duration-300'>Movies</Link>
-        <p onClick={handleTheaterAdmins} className={`${isAdmin?' hover:text-yellow-500 hover:scale-103 transition-all duration-300':'hover:cursor-not-allowed'}`}>Theaters</p>
+        <p onClick={handleTheaterAdmins} className={isAdmin?' hover:text-yellow-500 hover:scale-103 transition-all duration-300':'hover:cursor-not-allowed'}>Theaters</p>
         <p onClick={showAbout} className='hover:text-yellow-500 hover:cursor-pointer hover:scale-103 transition-all duration-300'>About</p>
         <p onClick={showContact} className='hover:text-yellow-500 hover:cursor-pointer hover:scale-103 transition-all duration-300'>Contact</p>
       </div>
