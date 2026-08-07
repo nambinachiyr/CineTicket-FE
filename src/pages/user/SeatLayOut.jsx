@@ -13,11 +13,12 @@ const SeatLayOut = () => {
   const { showid, showDate, showTime } = useParams();
   const { contextEmail } = useContext(contextValue);
   const [load, setLoad] = useState(false);
+  const [isprocess, setIsprocess] = useState(false)
   const [show, setShow] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [error, setError] = useState('');
-  const [showPopUp,setShowPopUp] = useState(false)
-  
+  const [showPopUp, setShowPopUp] = useState(false)
+
   console.log(contextEmail, 'Email');
 
   useEffect(() => {
@@ -39,8 +40,8 @@ const SeatLayOut = () => {
   const row = [...new Set(show?.seats?.map((s) => s.row))];
 
   function handleSeatBooking(seat) {
-    if (seat.status==='booked' || seat.heldBy) {
-      return ;
+    if (seat.status === 'booked' || seat.heldBy) {
+      return;
     }
     if (!contextEmail) {
       return setError('Please LogIn First');
@@ -67,25 +68,25 @@ const SeatLayOut = () => {
     setShowPopUp(false)
     const seats = selectedSeats.map((s) => s.seatNumber);
     console.log(seats);
-     try {
+    try {
       setLoad(true)
-    //   const ok = window.confirm("Proceed to payment ? ")
-    //   if(!ok) return;
+      setIsprocess(true)
+      //   const ok = window.confirm("Proceed to payment ? ")
+      //   if(!ok) return;
       const response = await paymentInstance.post('/create-order', {
         showId: showid,
         seatNumbers: seats,
       });
-      console.log("CREATE ORDER RES : ",response?.data)
+      console.log("CREATE ORDER RES : ", response?.data)
       const order = response?.data?.order;
-      console.log(order,"ORDER");
-      return openRazorPay(order, showid, seats, navi,setLoad);
+      console.log(order, "ORDER");
+      return openRazorPay(order, showid, seats, navi, setLoad, setIsprocess);
     } catch (err) {
       console.log(err.response);
+      setLoad(false)
+      setIsprocess(false)
     }
-    finally{
-        setLoad(false)
-        
-    }
+    
   }
 
   console.log(show)
@@ -111,28 +112,28 @@ const SeatLayOut = () => {
   // SeatLayOut Design
   return (
     <>
-      <div className="bg-neutral-100 px-2 pt-4 relative">
-             <img onClick={()=>navi(-1)} className='p-2  hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
-        
-        {( load  || !show) && (
-          <div className="flex justify-center items-center min-h-screen">
+      <div className="bg-neutral-100  px-2 pt-4 relative">
+        <img onClick={() => navi(-1)} className='p-2  hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
+
+        {isprocess && (
+          <div className="fixed bg-black/40 inset-0 flex justify-center items-center ">
             <LoadSpinContent />
           </div>
         )}
         {
-            showPopUp&&<div  className='absolute inset-0 border flex justify-center items-center'>
-                <div className='w-2xs md:w-2xl p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center items-center border bg-yellow-300/80 border-gray-400 rounded-ee-[60px] rounded-ss-[60px] '>
-                    <h1 className='text-xl md:text-2xl'>Confirm Booking</h1>
-                    <div className='flex md:text-xl flex-col flex-wrap gap-2 md:gap-4'>
-                        <p className='flex flex-wrap'>Seats : [{selectedSeats.map((s,index)=><span key={s.seatNumber} className='flex flex-row'>{s.seatNumber}{selectedSeats.length-1===index?"":','}</span>)}]</p>
-                        <p className='font-semibold'>Total : ₹{show.price*selectedSeats.length}</p>
-                    </div>
-                    <p className='flex gap-8 md:text-lg'>
-                        <span className='border py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-yellow-600 hover:shadow-lg' onClick={()=>setShowPopUp(false)}>Cancel</span>
-                        <span className='border py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-yellow-600 hover:shadow-lg' onClick={handle_proceed}>Proceed</span>
-                    </p>
-                </div>
+          showPopUp && <div className='absolute inset-0 border flex justify-center items-center'>
+            <div className='w-2xs md:w-2xl p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center items-center border bg-yellow-300/80 border-gray-400 rounded-ee-[60px] rounded-ss-[60px] '>
+              <h1 className='text-xl md:text-2xl'>Confirm Booking</h1>
+              <div className='flex md:text-xl flex-col flex-wrap gap-2 md:gap-4'>
+                <p className='flex flex-wrap'>Seats : [{selectedSeats.map((s, index) => <span key={s.seatNumber} className='flex flex-row'>{s.seatNumber}{selectedSeats.length - 1 === index ? "" : ','}</span>)}]</p>
+                <p className='font-semibold'>Total : ₹{show.price * selectedSeats.length}</p>
+              </div>
+              <p className='flex gap-8 md:text-lg'>
+                <span className='border py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-yellow-600 hover:shadow-lg' onClick={() => setShowPopUp(false)}>Cancel</span>
+                <span className='border py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-yellow-600 hover:shadow-lg' onClick={handle_proceed}>Proceed</span>
+              </p>
             </div>
+          </div>
         }
 
         <div className="flex flex-col gap-12 min-h-screen justify-center items-center">
@@ -156,7 +157,7 @@ const SeatLayOut = () => {
                 <p
                   onClick={() => handleSeatBooking(s)}
                   key={s.seatNumber}
-                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-white' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !==contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 lg:w-10 lg:h-10 h-8 rounded-sm text-neutral-700 rounded-se-xl border text-center flex justify-center items-center `}
+                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-white' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !== contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 lg:w-10 lg:h-10 h-8 rounded-sm text-neutral-700 rounded-se-xl border text-center flex justify-center items-center `}
                 >
                   {s.column}
                 </p>
@@ -212,10 +213,10 @@ const SeatLayOut = () => {
             )}
 
             <button
-              onClick={handlePay_Booking} disabled = {selectedSeats.length===0}
-              className={`border min-w-2xs p-3 text-lg bg-blue-400 text-gray-50 tracking-widest font-bold rounded-t-3xl rounded-e-2xl hover:shadow-olive-500 hover:shadow-2xl  hover:cursor-pointer ${selectedSeats.length===0?"hover:cursor-not-allowed opacity-50 ":"shadow-2xl"}`}
-            >{load?<LoadSpin/>:"Confirm & Pay"}
-              
+              onClick={handlePay_Booking} disabled={selectedSeats.length === 0}
+              className={`border min-w-2xs p-3 text-lg bg-blue-400 text-gray-50 tracking-widest font-bold rounded-t-3xl rounded-e-2xl hover:shadow-olive-500 hover:shadow-2xl  hover:cursor-pointer ${selectedSeats.length === 0 ? "hover:cursor-not-allowed opacity-50 " : "shadow-2xl"}`}
+            >{load ? <LoadSpin /> : "Confirm & Pay"}
+
             </button>
           </div>
         </div>
