@@ -2,7 +2,6 @@
 import React from 'react'
 import NavbarTA from '../../components/theaterAdmin/NavbarTA'
 import MainDashBoradTA from '../../components/theaterAdmin/MainDashBoradTA'
-import FooterAT from '../../components/theaterAdmin/FooterTA'
 
 const HomeTA = () => {
   return (
@@ -11,7 +10,8 @@ const HomeTA = () => {
       <div className='flex-1'>
         <MainDashBoradTA />
       </div>
-      <FooterAT />
+      {/* <FooterAT /> */}
+      {/* work later */}
     </div>
   )
 }
