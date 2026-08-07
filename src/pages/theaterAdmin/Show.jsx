@@ -64,7 +64,7 @@ const Show = () => {
             revalidate()
 
         } catch (err) {
-            console.log(err.response?.data.message,"Error")
+            console.log(err.response?.data,"Error")
             toast.error(err.response?.data?.message)
         }
     }
