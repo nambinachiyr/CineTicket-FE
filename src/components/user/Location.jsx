@@ -8,7 +8,7 @@ const Location = ({stateLocation,setStateLocation,cityLocation,setCityLocation})
       const [stateAll,setStateAll] = useState([])
       const[cityAll,setCityAll] = useState([])
 
-      console.timeLog(cityLocation,stateLocation)
+      console.Log(cityLocation,stateLocation)
      useEffect(()=>{
         async function getAllStates(){
            try{
