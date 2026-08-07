@@ -41,14 +41,19 @@ const Footer = () => {
         try{
           console.log("Tring to call this")
            const response = await theaterAdminInstance.get(`/email/${contextEmail}`)
-           console.log(response.data?.adminDetails)
-           if(adminDetails?.isActive){
+           console.log("response",response.data)
+           console.log("Stsuts",response.status)
+           const admin = response.data?.adminDetails
+           if(admin?.isActive){
 
              setIsAdmin(true)
+           }else{
+            console.log("No")
+            setIsAdmin(false)
            }
             
           }catch(err){
-           console.log(err.response?.data?.message)
+           console.log("err",err.response?.data?.message)
            setIsAdmin(false)
         }
     }
