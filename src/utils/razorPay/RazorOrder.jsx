@@ -3,9 +3,10 @@ import bookingInstance from "../../axioInstances/user/bookingInstance"
 
 function openRazorPay(order,showid,seats,navi){
     // console.log(showid,"rezorPay Order")
-    // console.log(order,"RazorPay")
+    console.log(order,"RazorPay")
     // console.log(seats,"rezorPay Order")
-    // console.log(import.meta.env.VITE_RAZORPAY_KEY_ID,"R_Key")
+    console.log(import.meta.env.VITE_RAZORPAY_KEY_ID,"R_Key")
+    console.log(window.Razorpay,"object")
     const option = {
         key:import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount:order.amount,
@@ -30,7 +31,12 @@ function openRazorPay(order,showid,seats,navi){
         },
         theme:{color:"#2563eb"}
     }
+    console.log("RazorPay Options",option)
     const razorpay = new window.Razorpay(option)
+
+    razorpay.on('payment.failed',function(response){
+        console.log("PAYMENT FAILED",response.error)
+    })
 
     razorpay.open()
 }

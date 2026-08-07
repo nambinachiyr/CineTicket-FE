@@ -75,8 +75,9 @@ const SeatLayOut = () => {
         showId: showid,
         seatNumbers: seats,
       });
+      console.log("CREATE ORDER RES : ",response?.data)
       const order = response?.data?.order;
-      console.log(order);
+      console.log(order,"ORDER");
       return openRazorPay(order, showid, seats, navi);
     } catch (err) {
       console.log(err.response);
