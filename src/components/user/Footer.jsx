@@ -33,12 +33,19 @@ const Footer = () => {
 
   useEffect(()=>{
     async function checkAdmin() {
-      !contextEmail && ''
+      if(!contextEmail){
+        console.log("No Context admin")
+        return setIsAdmin(false)
+      }
  console.log("This Is THe Footer Call fro TheaterAdmin")
         try{
+          console.log("Tring to call this")
            const response = await theaterAdminInstance.get(`/email/${contextEmail}`)
-           console.log(response.data)
-           setIsAdmin(true)
+           console.log(response.data?.adminDetails)
+           if(adminDetails?.isActive){
+
+             setIsAdmin(true)
+           }
             
           }catch(err){
            console.log(err.response?.data?.message)
@@ -47,7 +54,7 @@ const Footer = () => {
     }
 
     checkAdmin()
-  },[contextEmail])
+  },[])
   
 
   async function handleTheaterAdmins(){
