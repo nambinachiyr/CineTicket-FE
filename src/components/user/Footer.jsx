@@ -54,7 +54,7 @@ const Footer = () => {
     }
 
     checkAdmin()
-  },[])
+  },[contextEmail])
   
 
   async function handleTheaterAdmins(){
