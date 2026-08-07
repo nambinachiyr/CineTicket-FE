@@ -37,22 +37,23 @@ const Show = () => {
         fetchingScreen()
     }, [])
     console.log(screens)
-    async function handleUpdateShow() {
+    async function handleUpdateShow(s) {
+        console.log(s)
         try {
-            console.log(editData.screen._id)
+            // console.log(editData.screen._id)
             const updatedData = {
-                screen: editData.screen._id,
-                movie: editData.movie._id,
-                theater: editData.theater._id,
-                availableSeats: editData.availableSeats,
-                bookedSeats: editData.bookedSeats,
-                price: editData.price,
-                seats: editData.seats,
-                totalSeats: editData.totalSeats,
-                bookingStatus: editData.bookingStatus,
-                showStatus: editData.showStatus,
-                showDate: editData.showDate,
-                showTime: editData.showTime
+                screen: editData.screen._id|| s.screen._id,
+                movie: editData.movie._id || s.movie._id,
+                theater: editData.theater._id || s.theater._id,
+                availableSeats: editData.availableSeats || s.availableSeats,
+                bookedSeats: editData.bookedSeats || s.bookedSeats,
+                price: editData.price || s.price,
+                seats: editData.seats || s.seats,
+                totalSeats: editData.totalSeats || s.totalSeats,
+                bookingStatus: editData.bookingStatus || s.bookingStatus,
+                showStatus: editData.showStatus || s.showStatus,
+                showDate: editData.showDate || s.showDate,
+                showTime: editData.showTime || s.showTime
             }
             console.log(updatedData)
             const response = await showInstance.put(`/${editId}/update`, { data: updatedData })
@@ -159,7 +160,7 @@ const Show = () => {
                                                 setEditId('')
                                                 setEditData(null)
                                             }} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Cancel</button>
-                                            <button onClick={handleUpdateShow} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Save</button>
+                                            <button onClick={()=>handleUpdateShow(s)} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Save</button>
                                         </div>
                                     </div>
                                 ) : (
