@@ -65,6 +65,7 @@ const Show = () => {
 
         } catch (err) {
             console.log(err.response?.data,"Error")
+            console.log(err.message,"err")
             toast.error(err.response?.data?.message)
         }
     }
