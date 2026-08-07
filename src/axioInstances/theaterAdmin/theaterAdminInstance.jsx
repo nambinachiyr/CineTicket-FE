@@ -2,9 +2,9 @@ import axios from "axios"
 
 const baseurl = import.meta.env.VITE_API_URL
 
-const theaterAdminInstance = axios.create({
+const theaterAdmin = axios.create({
     baseURL:baseurl+'/tadmin',
     withCredentials:true
 })
 
-export default theaterAdminInstance;
+export default theaterAdmin;

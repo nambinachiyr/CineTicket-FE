@@ -6,7 +6,7 @@ import Contact from './Contact'
 import PrivacyPolicy from './PrivacyPolicy'
 import Term_Conditions from './Terms&Conditions'
 import { contextValue } from '../../contextvaluses/ContextValue'
-import theaterAdminInstance from '../../axioInstances/theaterAdmin/theaterAdminDash'
+import theaterAdmin from '../../axioInstances/theaterAdmin/theaterAdminInstance'
 
 
 const Footer = () => {
@@ -40,7 +40,7 @@ const Footer = () => {
  console.log("This Is THe Footer Call fro TheaterAdmin")
         try{
           console.log("Tring to call this")
-           const response = await theaterAdminInstance.get(`/email/${contextEmail}`)
+           const response = await theaterAdmin.get(`/email/${contextEmail}`)
            console.log("response",response.data)
            console.log("Stsuts",response.status)
            const admin = response.data?.adminDetails
