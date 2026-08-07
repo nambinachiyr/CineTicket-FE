@@ -115,6 +115,7 @@ const Show = () => {
                                                 <select className='border w-full focus:outline-none border-gray-600 px-2 text-yellow-700 py-1' type="text"
                                                     value={editData?.screen?._id || s?.screen?._id}
                                                     onChange={(e) => {
+                                                        console.log(s,"SCREEN")
                                                         const selectedScreen = screens.find(
                                                             screen => {
                                                                 console.log(screen._id === e.target.value)
@@ -124,7 +125,7 @@ const Show = () => {
                                                         //   console.log(selectedScreen)
                                                         setEditData({ ...editData, screen: selectedScreen })
                                                     }} >
-                                                    <option disabled>Select Screen</option>
+                                                    <option value='' disabled>Select Screen</option>
                                                     {
 
                                                         screens?.map(sr => (
