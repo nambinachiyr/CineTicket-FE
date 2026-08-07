@@ -45,7 +45,7 @@ const Footer = () => {
            console.log("Stsuts",response.status)
            const admin = response.data?.adminDetails
            if(admin?.isActive){
-
+              console.log(":ADMIN")
              setIsAdmin(true)
            }else{
             console.log("No")
@@ -53,7 +53,8 @@ const Footer = () => {
            }
             
           }catch(err){
-           console.log("err",err.response?.data?.message)
+           console.log("err",err.response?.data)
+           console.log("ERR",err.response?.status)
            setIsAdmin(false)
         }
     }
