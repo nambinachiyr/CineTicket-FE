@@ -1,7 +1,7 @@
 
 import bookingInstance from "../../axioInstances/user/bookingInstance"
 
-function openRazorPay(order,showid,seats,navi){
+function openRazorPay(order,showid,seats,navi,setLoad){
     // console.log(showid,"rezorPay Order")
     console.log(order,"RazorPay")
     // console.log(seats,"rezorPay Order")
@@ -16,6 +16,8 @@ function openRazorPay(order,showid,seats,navi){
         order_id:order.id,
         handler:async function (response) {
             // console.log(response,"respones")
+            try{
+                setLoad(true)
             const book =await bookingInstance.post('/verify-payment',
                 {
                     showId:showid,
@@ -27,7 +29,17 @@ function openRazorPay(order,showid,seats,navi){
             )
             console.log(book?.data?.newBook?._id)
             const bookingId = book?.data?.newBook?._id
-            navi(`/booking-success/${bookingId}`)
+            if(bookingId){
+
+                navi(`/booking-success/${bookingId}`)
+            }
+        }
+            catch(err){
+                console.log("VERIFY",err.response?.data)
+            }
+            finally{
+                setLoad(false)
+            }
         },
         theme:{color:"#2563eb"}
     }

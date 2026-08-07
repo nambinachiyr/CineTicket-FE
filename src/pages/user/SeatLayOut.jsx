@@ -78,7 +78,7 @@ const SeatLayOut = () => {
       console.log("CREATE ORDER RES : ",response?.data)
       const order = response?.data?.order;
       console.log(order,"ORDER");
-      return openRazorPay(order, showid, seats, navi);
+      return openRazorPay(order, showid, seats, navi,setLoad);
     } catch (err) {
       console.log(err.response);
     }
