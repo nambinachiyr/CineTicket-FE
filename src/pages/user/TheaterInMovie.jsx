@@ -63,16 +63,16 @@ console.log(selectDate)
     <div className='bg-[#fdfdf6] p-4'>
      <img onClick={()=>navi(-1)} className='p-2 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
      {
-      !data?.show && <p className='flex min-h-screen justify-center items-center text-xl text-gray-700'>No shows ...</p>
+       !data?.shows?.length ? <p className='flex min-h-screen justify-center items-center text-xl text-gray-700'>No shows ...</p>
 
-     }
+     :
     <div className='p-3 tracking-wider flex flex-col gap-5  md:gap-7'>
 
       {
-        data?.shows?.map((show)=>(
+       data?.shows?.map((show)=>(
          show?.bookingStatus==="Open"?(
            <div key={show._id} className='flex justify-center gap-7 items-center text-xl md:text-2xl  font-semibold'>
-            <img className='w-30 md:w-[50%] object-cover md:h-50 lg:h-55 rounded-lg' src={`http://image.tmdb.org/t/p/original${show?.movie?.poster_path}`} alt="Movie Poster" />
+            <img className='w-30 md:w-[50%] object-cover md:h-50 lg:h-55 rounded-lg' src={`https://image.tmdb.org/t/p/original${show?.movie?.poster_path}`} alt="Movie Poster" />
             <h1 className='text-wrap'>{show.movie.title}</h1>
           </div>
 
@@ -109,6 +109,7 @@ console.log(selectDate)
       </div>
 
     </div>
+}
     </div>
   )
 }
