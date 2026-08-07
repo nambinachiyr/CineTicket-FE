@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ticket from '.../../../src/assets/ticket1.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import About from './About'
 import Contact from './Contact'
 import PrivacyPolicy from './PrivacyPolicy'
 import Term_Conditions from './Terms&Conditions'
+import { contextValue } from '../../contextvaluses/ContextValue'
+import theaterAdminInstance from '../../axioInstances/theaterAdmin/theaterAdminDash'
 
 
 const Footer = () => {
+  const {contextEmail,contextEmailTA} = useContext(contextValue)
+  const [isAdmin,setIsAdmin] = useState(false)
+  const navi = useNavigate()
   const [isShow,setIsShow] = useState(false)
   const [isAbout,setIsAbout] = useState(false)
   const [isContact,setIsContact] = useState(false)
@@ -25,7 +30,29 @@ const Footer = () => {
   function showT_C(){
     !isT_C?setIsT_C(true):setIsT_C(false)
   }
+
+  useEffect(()=>{
+    async function checkAdmin() {
+       !contextEmail && ''
+
+        try{
+           const response = await theaterAdminInstance.get(`/email/${contextEmail}`)
+           console.log(response.data)
+           setIsAdmin(true)
+            
+          }catch(err){
+           console.log(err.response?.data?.message)
+           setIsAdmin(false)
+        }
+    }
+  },[contextEmail])
   
+
+  async function handleTheaterAdmins(){
+       
+          isAdmin??navi('/theater-admin/login')
+
+  }
   return (
     <>
       
@@ -38,7 +65,7 @@ const Footer = () => {
       <div className='grid grid-cols-2  gap-3 justify-items-center md:grid-cols-3 lg:grid-cols-5 font-semibold'>
         <Link to={'/'} className='hover:text-yellow-500 hover:scale-105 transition-all duration-300'>Home</Link>
         <Link className='hover:text-yellow-500 hover:scale-103 transition-all duration-300'>Movies</Link>
-        <Link className='hover:text-yellow-500 hover:scale-103 transition-all duration-300'>Theaters</Link>
+        <p onClick={handleTheaterAdmins} className={`${isAdmin?' hover:text-yellow-500 hover:scale-103 transition-all duration-300':'hover:cursor-not-allowed'}`}>Theaters</p>
         <p onClick={showAbout} className='hover:text-yellow-500 hover:cursor-pointer hover:scale-103 transition-all duration-300'>About</p>
         <p onClick={showContact} className='hover:text-yellow-500 hover:cursor-pointer hover:scale-103 transition-all duration-300'>Contact</p>
       </div>
