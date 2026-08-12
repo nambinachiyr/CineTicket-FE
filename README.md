@@ -15,6 +15,8 @@ https://cineticket-mern.netlify.app/
 
 ### Theater Admin
 
+adminLogin -> /theater-admin/login
+
 -Email : saravana12@gmail.com
 -theaterName : PVR Luxe
 -password : 12345
