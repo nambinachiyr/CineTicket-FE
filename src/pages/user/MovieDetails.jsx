@@ -75,7 +75,7 @@ const MovieDetails = () => {
       
       <div>
       <div className=" rounded-lg space-y-1 lg:grid grid-cols-2 justify-items-center">
-        <div className="rounded-2xl border w-xs lg:w-sm mx-auto  ">
+        <div className="rounded-2xl w-xs lg:w-sm mx-auto  ">
           {/* {trailer ? (
             <iframe
               className="w-full rounded-2xl aspect-video"
