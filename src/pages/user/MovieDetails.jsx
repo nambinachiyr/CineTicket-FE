@@ -3,6 +3,8 @@ import MovieInstance from '../../axioInstances/user/movieInstance';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import clock from '../../assets/clock.png';
 import backArrow from "../../assets/left-arrow.png"
+import LoadSpin from '../../components/user/LoadSpinButton';
+import LoadSpinContent from '../../components/user/LoadSpinContent';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -12,11 +14,13 @@ const MovieDetails = () => {
   const [mCast, setMCast] = useState(null);
   const [msg,setMsg] = useState('')
   const [display,setDisplay] = useState(false)
+  const [load,setLoad] = useState(false)
 
   useEffect(() => {
     console.log("Before API call")
     async function getMovie() {
       try {
+        setLoad(true)
         setDisplay(false)
         console.log("Entering")
         const response = await MovieInstance.get(`/tmdb/${id}`);
@@ -26,6 +30,9 @@ const MovieDetails = () => {
       } catch (err) {
         setDisplay(true)
         setMsg(err.response?.data?.message);
+      }
+      finally{
+        setLoad(false)
       }
     }
     getMovie();
@@ -59,12 +66,12 @@ const MovieDetails = () => {
     <div className='bg-[#fcfcf1] p-2'>
       <img onClick={()=>navi(-1)} className='p-1 w-7 fixed z-50 ml-3 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
     {
-      msg?<p className='text-center fixed top-[50%] left-[40%]'>{msg}<p> Loading...</p></p>:''
+      msg?<p className='text-center fixed top-[50%] left-[40%]'>{msg}<p> Loading...</p><p><LoadSpin/></p></p>:''
     }
     
     <div className="p-3 relative py-3 md:text-xs mt-4 tracking-wider flex flex-col gap-5 md:gap-8 min-h-screen">
       {
-        display?<p></p>:
+        display?<p></p>:load?<LoadSpinContent/>:
       
       <div>
       <div className=" rounded-lg space-y-1 lg:grid grid-cols-2 justify-items-center">
@@ -80,7 +87,7 @@ const MovieDetails = () => {
             />
           ) : ( */}
             <img
-              className="border rounded-2xl "
+              className="rounded-2xl h-78"
               src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path || movie?.poster_path}`}
               alt="Poster"
             />
