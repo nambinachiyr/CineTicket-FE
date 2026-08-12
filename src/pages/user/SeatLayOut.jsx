@@ -112,8 +112,8 @@ const SeatLayOut = () => {
   // SeatLayOut Design
   return (
     <>
-      <div className="bg-neutral-100  px-2 pt-4 relative">
-        <img onClick={() => navi(-1)} className='p-2  hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
+      <div className="bg-neutral-100 px-2 pt-2 relative">
+        <img onClick={() => navi(-1)} className='px-2 fixed lg:w-10 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
 
         {isprocess && (
           <div className="fixed bg-black/40 inset-0 flex justify-center items-center ">
@@ -136,12 +136,12 @@ const SeatLayOut = () => {
           </div>
         }
 
-        <div className="flex flex-col gap-12 min-h-screen justify-center items-center">
+        <div className="flex flex-col gap-12 lg:gap-3 min-h-screen justify-center items-center">
           <h1 className=" text-xl ">
             Price - <span>₹{show?.price}</span>
           </h1>
           <div className="flex ">
-            <p className=" border w-7 lg:w-15 lg:text-3xl bg-gray-400 text-white border-gray-400 justify-center items-center mb-2 lg:mb-6 flex flex-col gap-5 lg:gap-10  rounded-2xl">
+            <p className=" border bg-gray-400 text-white border-gray-400 justify-center items-center mb-2 lg:mb-6 flex flex-col gap-5 rounded-2xl">
               {row.map((r) => (
                 <span
                   key={r}
@@ -152,12 +152,12 @@ const SeatLayOut = () => {
               ))}
             </p>
 
-            <div className="grid grid-cols-10 lg:text-xl md:text-[17px] gap-3 lg:gap-8 p-3 justify-items-center">
+            <div className="grid grid-cols-10 md:text-[15px] gap-3 p-3 justify-items-center">
               {show?.seats?.map((s) => (
                 <p
                   onClick={() => handleSeatBooking(s)}
                   key={s.seatNumber}
-                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-white' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !== contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 lg:w-10 lg:h-10 h-8 rounded-sm text-neutral-700 rounded-se-xl border text-center flex justify-center items-center `}
+                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-white' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !== contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 h-8 rounded-sm text-neutral-700 rounded-se-xl border text-center flex justify-center items-center `}
                 >
                   {s.column}
                 </p>
@@ -166,34 +166,34 @@ const SeatLayOut = () => {
             </div>
           </div>
 
-          <div className="flex gap-5 items-center md:text-[17px] lg:text-lg justify-center text-neutral-800  ">
+          <div className="flex gap-5 items-center md:text-[12px] justify-center text-neutral-800  ">
             <div className="flex flex-col justify-center items-center ">
               <p
-                className={`w-5 h-5  rounded-full border-2 border-gray-400 bg-gray-400 `}
+                className={`w-3 h-3 rounded-full border-2 border-gray-400 bg-gray-400 `}
               ></p>
               <span>Sold</span>
             </div>
             <div className="flex flex-col justify-center items-center ">
-              <p className="w-5 h-5 rounded-full border-2 border-neutral-700"></p>
+              <p className="w-3 h-3 rounded-full border-2 border-neutral-700"></p>
               <span>available</span>
             </div>
             <div className="flex flex-col justify-center items-center ">
-              <p className="w-5 h-5 bg-yellow-500 rounded-full border-2 border-yellow-500"></p>
+              <p className="w-3 h-3 bg-yellow-500 rounded-full border-2 border-yellow-500"></p>
               <span>Filling Fast</span>
             </div>
             <div className="flex flex-col justify-center items-center ">
-              <p className="w-5 h-5 rounded-full border-2 border-green-500 bg-green-500"></p>
+              <p className="w-3 h-3 rounded-full border-2 border-green-500 bg-green-500"></p>
               <span>selected</span>
             </div>
           </div>
 
-          <div className="lg:text-xl md:text-[16px">
+          <div className="">
             {selectedSeats?.length > 0 && (
               <div className="flex flex-col items-center justify-center">
-                <div className="flex text-lg font-bold">
+                <div className="flex font-semibold text-[14px]">
                   [
                   {selectedSeats?.map((s, index) => (
-                    <p key={s.seatNumber} className="font-semibold">
+                    <p key={s.seatNumber} className="text-[14px]">
                       {' '}
                       {s.seatNumber}{' '}
                       <span>
@@ -201,9 +201,10 @@ const SeatLayOut = () => {
                       </span>{' '}
                     </p>
                   ))}
+                  
                   ]
                 </div>
-                <p className="font-light">
+                <p className="font-light text-[12px]">
                   {selectedSeats?.length}{' '}
                   <span>
                     {selectedSeats?.length > 1 ? 'seats' : 'seat'}
@@ -214,7 +215,7 @@ const SeatLayOut = () => {
 
             <button
               onClick={handlePay_Booking} disabled={selectedSeats.length === 0}
-              className={`border min-w-2xs p-3 text-lg bg-blue-400 text-gray-50 tracking-widest font-bold rounded-t-3xl rounded-e-2xl hover:shadow-olive-500 hover:shadow-2xl  hover:cursor-pointer ${selectedSeats.length === 0 ? "hover:cursor-not-allowed opacity-50 " : "shadow-2xl"}`}
+              className={`border min-w-2xs p-3 text-sm bg-blue-400 text-gray-50 tracking-widest font-bold rounded-t-3xl rounded-e-2xl hover:shadow-olive-500 hover:shadow-2xl  hover:cursor-pointer ${selectedSeats.length === 0 ? "hover:cursor-not-allowed opacity-50 " : "shadow-2xl"}`}
             >{load ? <LoadSpin /> : "Confirm & Pay"}
 
             </button>

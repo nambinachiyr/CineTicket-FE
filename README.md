@@ -1,16 +1,40 @@
-# React + Vite
+# Movie Ticket Booking System ## (Cine Ticket)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A MERN Stack movie ticket booking application.
 
-Currently, two official plugins are available:
+## Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+https://cineticket-mern.netlify.app/
 
-## React Compiler
+## Demo Credentials
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### User
 
-## Expanding the ESLint configuration
+-Email : nn@gmail.com
+-password : 12345
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Theater Admin
+
+-Email : saravana12@gmail.com
+-theaterName : PVR Luxe
+-password : 12345
+
+#### Alternative way theaterAdmin Dasboard Login
+
+If the Theater Admin account is logged in as a normal user:
+
+1. Go to the **Footer** section.
+2. Click **Theater**.
+3. It is go to theater Admin Login
+
+## Technologies Used
+
+-React
+-Node js
+-Express js
+-Mongo DB
+-Tailwind CSS
+
+
+
+

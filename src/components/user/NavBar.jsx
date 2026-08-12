@@ -65,7 +65,7 @@ const NavBar = () => {
                 <h1 className="text-[#ffa216] font-black text-xl lg:text-3xl">Cine Tickets</h1>
                 <p onClick={contextEmail?handleProfile:()=>navi('/login')} className="w-8 h-8 md:w-9 md:h-9 lg:w-11 lg:h-11 border hover:cursor-pointer rounded-full text-md font-bold text-orange-500 flex justify-center items-center bg-linear-to-r from-amber-400 via-amber-100 to-amber-400">{contextEmail ? profileName : <img src={contact} alt=" " className="w-6 lg:w-8" />}</p>
             </div>
-            <div className="border w-3/4 h-7 md:h-8 lg:h-11 mx-auto px-1 border-gray-400 bg-gray-50 pl-4 py-1 rounded-sm flex items-center justify-between">
+            <div className="border w-3/4 lg:w-1/2 h-7 md:h-8 lg:h-11 mx-auto px-1 border-gray-400 bg-gray-50 pl-4 py-1 rounded-sm flex items-center justify-between">
                 <input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} className="focus:outline-none  text-sm md:text-lg lg:text-2xl" />
                 <button type="button" onClick={handleSearchMovie} className="flex items-center px-1 rounded-md hover:bg-linear-to-r from-yellow-300 via-yellow-50 to-yellow-300 hover:cursor-pointer group">
                     <span className="text-xs text-gray-400 lg:text-sm">search</span>

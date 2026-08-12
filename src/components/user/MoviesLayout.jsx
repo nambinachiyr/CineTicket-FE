@@ -4,6 +4,7 @@ import LoadSpin from './LoadSpinButton'
 import { Link } from 'react-router-dom'
 import { contextValue } from '../../contextvaluses/ContextValue'
 import Location from './Location'
+import LoadSpinContent from './LoadSpinContent'
 
 
 const MoviesLayout = () => {
@@ -64,20 +65,18 @@ const MoviesLayout = () => {
             } catch (err) {
                 console.log(err.message)
             }
-        }
-
-        
-
-
+        }     
         moviesFetch()
         Upcoming()
         trending()
         PopularMovies()
     }, [contextState,contextCity])
-    console.log(movie, "NOW_PLAYINg")
-    console.log(upcoming, "UPCOMING")
-    console.log(trendMovies, "Trending")
-    console.log(popularity,"POPULAR")
+
+    console.log(movie.length, "NOW_PLAYINg")
+    console.log(upcoming.length, "UPCOMING")
+    console.log(trendMovies.length, "Trending")
+    console.log(popularity.length,"POPULAR")
+
     function handleOneCity() {
         setSelectLocation(true)
         setCityLocation(true)
@@ -91,11 +90,16 @@ const MoviesLayout = () => {
         setCityLocation(false)
     }
 
+    // Just Changed
+    if(!contextState && !contextCity){
+        return <div><LoadSpinContent/></div>
+    }
+
     return (
         <div className='reletive'>
 
 
-            <div className='flex items-end justify-end gap-3 text-lg pr-6'>
+            <div className='flex items-end justify-end gap-3 text-sm pr-6'>
                 <p className=' '>📍 {contextCity?.name},</p>
                 <p onClick={handleOneState} className='hover:cursor-pointer hover:scale-95 transition-all'> {contextState?.name}</p>
             </div>
@@ -111,19 +115,20 @@ const MoviesLayout = () => {
 
             {
                 load ? <LoadSpin /> : (
-                    <div className='py-8 md:pt-10 flex flex-col gap-5 bg-linear-to-r  from-gray-50 via-amber-50 to-gray-50 '>
+                    <div className='py-1  md:pt-10 flex flex-col gap-5 bg-linear-to-r  from-gray-50 via-amber-50 to-gray-50 '>
                         <div className='flex flex-col gap-3'>
                             <h1 className='text-xl text-yellow-500 font-semibold tracking-wider'>Now_Playing</h1>
                             <div className='flex gap-5 overflow-x-auto'>
 
+                                {/* Now Playing */}
+
                                 {
                                     movie && movie?.length > 0 ? (movie?.map((m => (
-                                        m.poster_path &&
+                                        m.poster_path && 
                                         <Link key={m._id} to={`/movie/${m._id}`}>
-
-                                            <div className=' w-35 h-65  md:w-45 flex-shrink-0 lg:w-55 hover:cursor-pointer shadow-md hover:shadow-2xl hover:translate-x-2 rounded-2xl shadow-yellow-200 transition-all hover:scale-105 duration-300'>
-                                                <img src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`} className='rounded-2xl' alt={m?.title} />
-                                                <p className='text-sm lg:text-xl font-semibold p-2 truncate'>{m?.title}</p>
+                                            <div className=' w-30 h-53 justify-center md:w-35 flex-shrink-0 lg:w-35 hover:cursor-pointer shadow-md hover:shadow-2xl hover:translate-x-2 rounded-2xl shadow-yellow-200 transition-all hover:scale-105 duration-300'>
+                                                <img src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`} className='rounded-2xl h-43' alt={m?.title} />
+                                                <p className='text-sm lg:text-[13x] font-semibold p-2 truncate'>{m?.title}</p>
                                             </div>
                                         </Link>
                                     )
@@ -139,12 +144,12 @@ const MoviesLayout = () => {
 
                                 {
                                     trendMovies && trendMovies?.length > 0 ? (trendMovies?.map((m => (
-                                        m.poster_path &&
+                                        m.poster_path && 
                                         <Link key={m._id} to={`/movie/${m._id}`}>
 
-                                            <div className=' w-35 h-65  md:w-45 lg:w-55 hover:cursor-pointer shadow-md hover:shadow-2xl hover:translate-x-2 rounded-2xl shadow-yellow-200 transition-all hover:scale-105 duration-300'>
-                                                <img src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`} className='rounded-2xl' alt={m?.title} />
-                                                <p className='text-sm lg:text-xl font-semibold p-2 truncate'>{m?.title}</p>
+                                            <div className=' w-30 h-53  md:w-35 lg:w-35 hover:cursor-pointer shadow-md hover:shadow-2xl hover:translate-x-2 rounded-2xl shadow-yellow-200 transition-all hover:scale-105 duration-300'>
+                                                <img src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`} className='rounded-2xl h-43' alt={m?.title} />
+                                                <p className='text-sm lg:text-[15px] font-semibold p-2 truncate'>{m?.title}</p>
                                             </div>
                                         </Link>
                                     )
@@ -167,9 +172,9 @@ const MoviesLayout = () => {
                                         m.poster_path &&
                                         <Link key={m._id} to={`/movie/${m._id}`}>
 
-                                            <div className=' w-35 h-65  md:w-45 lg:w-55 hover:cursor-pointer shadow-md hover:shadow-2xl hover:translate-x-2 rounded-2xl shadow-yellow-200 transition-all hover:scale-105 duration-300'>
-                                                <img src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`} className='rounded-2xl' alt={m?.title} />
-                                                <p className='text-sm lg:text-xl font-semibold p-2 truncate'>{m?.title}</p>
+                                            <div className=' w-30 h-53  md:w-35 lg:w-35 hover:cursor-pointer shadow-md hover:shadow-2xl hover:translate-x-2 rounded-2xl shadow-yellow-200 transition-all hover:scale-105 duration-300'>
+                                                <img src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`} className='rounded-2xl h-43' alt={m?.title} />
+                                                <p className='text-sm lg:text-[15px] font-semibold p-2 truncate'>{m?.title}</p>
                                             </div>
                                         </Link>
                                     )
@@ -194,7 +199,7 @@ const MoviesLayout = () => {
 
                                             <div className=' w-35 h-65  md:w-45 lg:w-55 hover:cursor-pointer shadow-md hover:shadow-2xl hover:translate-x-2 rounded-2xl shadow-yellow-200 transition-all hover:scale-105 duration-300'>
                                                 <img src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`} className='rounded-2xl' alt={m?.title} />
-                                                <p className='text-sm lg:text-xl font-semibold p-2 truncate'>{m?.title}</p>
+                                                <p className='text-sm lg:text-[15px] font-semibold p-2 truncate'>{m?.title}</p>
                                             </div>
                                         </Link>
                                     )

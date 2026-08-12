@@ -73,7 +73,7 @@ const Footer = () => {
   return (
     <>
       
-    <div className='text-sm relative bg-yellow-100 mt-1 rounded-2xl text-gray-600 p-5 flex flex-col gap-3'>
+    <div className='text-sm relative border border-neutral-400 bg-yellow-100 mt-1 rounded-2xl text-gray-600 p-5 flex flex-col gap-3'>
       {isAbout&&<About setIsAbout={setIsAbout}/>}
       {isContact&&<Contact setIsContact={setIsContact}/>}
       {isPrivacy&&<PrivacyPolicy setIsPrivacy={setIsPrivacy}/>}
