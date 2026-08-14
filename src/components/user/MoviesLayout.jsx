@@ -179,7 +179,7 @@ const MoviesLayout = () => {
                         )
                     )
                   ) : (
-                    <p>No Movies Found</p>
+                    ''
                   )}
                 </div>
               </div>
@@ -208,7 +208,7 @@ const MoviesLayout = () => {
                         ),
                     )
                   ) : (
-                    <p>No Movies Found</p>
+                    ''
                   )}
                 </div>
               </div>
@@ -239,7 +239,7 @@ const MoviesLayout = () => {
                         ),
                     )
                   ) : (
-                    <p>No Movies available</p>
+                    ''
                   )}
                 </div>
               </div>
