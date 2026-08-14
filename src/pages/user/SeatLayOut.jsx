@@ -96,7 +96,7 @@ const SeatLayOut = () => {
       navi('/login', { state: { from: `/${showid}/${showDate}/${showTime}` } });
     }
     return (
-      <div className="flex flex-col justify-center tracking-wider items-center bg-gray-200 min-h-screen">
+      <div className="flex flex-col justify-center tracking-wider items-center bg-[#0f0f0f] min-h-screen">
         <p>{error}</p>
         <button
           onClick={handleLogin}
@@ -112,7 +112,7 @@ const SeatLayOut = () => {
   // SeatLayOut Design
   return (
     <>
-      <div className="bg-neutral-100 px-2 pt-2 relative">
+      <div className="bg-[#0f0f0f] px-2 pt-2 relative">
         <img onClick={() => navi(-1)} className='px-2 fixed lg:w-10 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
 
         {isprocess && (
@@ -137,11 +137,11 @@ const SeatLayOut = () => {
         }
 
         <div className="flex flex-col gap-12 lg:gap-3 min-h-screen justify-center items-center">
-          <h1 className=" text-xl ">
-            Price - <span>₹{show?.price}</span>
+          <h1 className=" text-xl text-red-500">
+            Price - <span className='text-white'>₹{show?.price}</span>
           </h1>
           <div className="flex ">
-            <p className=" border bg-gray-400 text-white border-gray-400 justify-center items-center mb-2 lg:mb-6 flex flex-col gap-5 rounded-2xl">
+            <p className=" border bg-gray-400 text-white border-gray-100 justify-center items-center mb-2 lg:mb-6 flex flex-col gap-5 rounded-2xl">
               {row.map((r) => (
                 <span
                   key={r}
@@ -157,7 +157,7 @@ const SeatLayOut = () => {
                 <p
                   onClick={() => handleSeatBooking(s)}
                   key={s.seatNumber}
-                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-white' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !== contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 h-8 rounded-sm text-neutral-700 rounded-se-xl border text-center flex justify-center items-center `}
+                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-white' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !== contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 h-8 rounded-sm text-neutral-700 rounded-se-xl border border-gray-300 text-red-600 text-center flex justify-center items-center `}
                 >
                   {s.column}
                 </p>

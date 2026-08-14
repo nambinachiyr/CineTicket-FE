@@ -5,7 +5,7 @@ import MainDashBoradTA from '../../components/theaterAdmin/MainDashBoradTA'
 
 const HomeTA = () => {
   return (
-    <div className='flex flex-col rounded-2xl m-1 bg-[#a6cfff] min-h-screen'>
+    <div className='flex flex-col rounded-2xl m-1 bg-gray-500 min-h-screen'>
       <NavbarTA />
       <div className='flex-1'>
         <MainDashBoradTA />

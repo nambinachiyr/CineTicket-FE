@@ -25,6 +25,7 @@ import Theater from "./pages/theaterAdmin/Theater"
 import theaterLoader from "./loaders/theaterAdmin/Theaterget"
 import AddNewScreen from "./pages/theaterAdmin/AddNewScreen"
 import AddNewShow from "./pages/theaterAdmin/AddNewShow"
+import RunningMovies from "./pages/theaterAdmin/RunningMovies"
 
 const routes = [
   {
@@ -48,7 +49,7 @@ const routes = [
         element: <MovieDetails />
       },
       {
-        path: "theaters_shows/:id",
+        path: "theaters_shows/:id/:stateId/:cityId",
         element: <TheaterInMovie />,
         loader: ShowLoader,
         hydrateFallbackElement: <LoadSpinContent />
@@ -100,6 +101,10 @@ const routes = [
         element: <Show />,
         loader: Allshows,
         hydrateFallbackElement: <LoadSpinContent />
+      },
+      {
+        path:"runningmovies",
+        element:<RunningMovies/>
       },
       {
         path: "addscreen",

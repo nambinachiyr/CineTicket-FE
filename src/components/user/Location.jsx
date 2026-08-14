@@ -8,14 +8,14 @@ const Location = ({stateLocation,setStateLocation,cityLocation,setCityLocation})
       const [stateAll,setStateAll] = useState([])
       const[cityAll,setCityAll] = useState([])
 
-      console.Log(cityLocation,stateLocation)
+      console.log(cityLocation,stateLocation)
      useEffect(()=>{
         async function getAllStates(){
            try{
              const response = await stateInstance.get('/allStates')
              setStateAll(response?.data?.allStates)
            }catch(err){
-            console.log(err.response?.data?.message)
+            console.log(err.message)
            }
         }
         getAllStates()
@@ -38,6 +38,7 @@ const Location = ({stateLocation,setStateLocation,cityLocation,setCityLocation})
 
      function handleState(s){
         setContextState(s)
+        setContextCity(null)
         setStateLocation(false)
         setCityLocation(true)
      }

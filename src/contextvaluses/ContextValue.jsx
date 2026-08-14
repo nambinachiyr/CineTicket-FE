@@ -78,7 +78,7 @@ const ContextProvider = ({ children }) => {
       try{
         const response = await theaterAdminInstance.get('/mee')
         setContextTA(response?.data?.admin)
-        setContextEmailTA(response?.data?.admin._id)
+        setContextEmailTA(response?.data?.admin.email)
       }catch(err){
         console.log(err.response?.data?.message)
       }

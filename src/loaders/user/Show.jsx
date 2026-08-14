@@ -2,12 +2,14 @@
 import showInstance from "../../axioInstances/user/showInstance"
 const showLoader = async({params})=>{
     try{
-        const {id} =  params
-       const response = await showInstance.get(`/movie/${id}`)
+        const {id,stateId,cityId} =  params
+       const response = await showInstance.get(`/movie/${id}/${stateId}/${cityId}`)
        console.log(response.data)
        return response.data
     }catch(err){
-        console.log(err)
+        console.log("STATUS ",err.response?.status)
+        console.log("BACKEND MSG",err.response?.data)
+        console.log("URL ",err.config?.url)
         return []
     }
 }

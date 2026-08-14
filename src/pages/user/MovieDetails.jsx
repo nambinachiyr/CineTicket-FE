@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MovieInstance from '../../axioInstances/user/movieInstance';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import clock from '../../assets/clock.png';
 import backArrow from "../../assets/left-arrow.png"
 import LoadSpin from '../../components/user/LoadSpinButton';
 import LoadSpinContent from '../../components/user/LoadSpinContent';
+import { contextValue } from '../../contextvaluses/ContextValue';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -15,26 +16,27 @@ const MovieDetails = () => {
   const [msg,setMsg] = useState('')
   const [display,setDisplay] = useState(false)
   const [load,setLoad] = useState(false)
+  const {contextState,contextCity} = useContext(contextValue)
 
+  async function getMovie() {
+    try {
+      setLoad(true)
+      setDisplay(false)
+      console.log("Entering")
+      const response = await MovieInstance.get(`/tmdb/${id}`);
+      setMovie(response?.data?.Movie);
+      setMCast(response?.data?.cast);
+      console.log("Finised")
+    } catch (err) {
+      setDisplay(true)
+      setMsg(err.response?.data?.message);
+    }
+    finally{
+      setLoad(false)
+    }
+  }
   useEffect(() => {
     console.log("Before API call")
-    async function getMovie() {
-      try {
-        setLoad(true)
-        setDisplay(false)
-        console.log("Entering")
-        const response = await MovieInstance.get(`/tmdb/${id}`);
-        setMovie(response?.data?.Movie);
-        setMCast(response?.data?.cast);
-        console.log("Finised")
-      } catch (err) {
-        setDisplay(true)
-        setMsg(err.response?.data?.message);
-      }
-      finally{
-        setLoad(false)
-      }
-    }
     getMovie();
   }, [id]);
 
@@ -59,19 +61,18 @@ const MovieDetails = () => {
   console.log(mCast);
   const mainCast = mCast?.cast?.slice(0, 7) || [];
 
-  console.log(typeof mCast);
+  console.log(contextCity,contextState);
   console.log(mainCast);
 
   return (
-    <div className='bg-[#fcfcf1] p-2'>
+    <div className='bg-[#0f0f0f] p-2 text-white'>
       <img onClick={()=>navi(-1)} className='p-1 w-7 fixed z-50 ml-3 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
-    {
-      msg?<p className='text-center fixed top-[50%] left-[40%]'>{msg}<p> Loading...</p><p><LoadSpin/></p></p>:''
-    }
-    
+      
     <div className="p-3 relative py-3 md:text-xs mt-4 tracking-wider flex flex-col gap-5 md:gap-8 min-h-screen">
       {
-        display?<p></p>:load?<LoadSpinContent/>:
+       load?<LoadSpinContent/>: display?(<p className='text-center fixed top-[50%] left-[40%]'>{msg}<br/>
+       <span onClick={getMovie()} className='bg-gray-500 cursor-pointer text-gray-200 px-2 py-1 rounded-md'>Retry</span>
+       </p>):
       
       <div>
       <div className=" rounded-lg space-y-1 lg:grid grid-cols-2 justify-items-center">
@@ -150,7 +151,7 @@ const MovieDetails = () => {
           <p>status-{movie?.status || ''}</p>
         </div>
         {movie?.overview ? (
-          <p className="text-xs md:text-[16px] lg:text-sm">
+          <p className="text-xs md:text-[16px] lg:text-sm my-3">
             <span>OverView: </span>
             {movie?.overview}
           </p>
@@ -158,7 +159,7 @@ const MovieDetails = () => {
           'OverView not available...'
         )}
       </div>
-     <p className='border-b border-dashed border-neutral-400 w-[90%] mx-auto'></p>
+     <p className='border-b mb-3 border-dashed border-neutral-400 w-[90%] mx-auto'></p>
       <div className="grid justify-items-center gap-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
         {mainCast?.map((cast) => (
           <div key={cast.id} className="flex flex-col gap-1 justify-center items-center">
@@ -172,7 +173,7 @@ const MovieDetails = () => {
               alt="castPic"
             />
             <p className="font-semibold text-sm md:text-[15px]">{cast.name} </p>
-            <span className="text-yellow-500 text-xs md:text-[15px]">
+            <span className="text-red-500 text-xs md:text-[15px]">
               ({cast.character})
             </span>
           </div>
@@ -181,8 +182,8 @@ const MovieDetails = () => {
       
       </div>
 }
-      <div onClick={()=>navi(`/theaters_shows/${id}`)} className="fixed flex justify-center bottom-2 md:bottom-4 left-0 right-0 px-3 md:px-8 py-1">
-        <button className="border lg:w-60 md:w-80 w-90 md:text-xl hover:cursor-pointer hover:bg-linear-to-r hover:from-yellow-400 hover:via-yellow-200 hover:to-yellow-400 border-gray-400 shadow-2xl hover:shadow-olive-500 hover:text-yellow-500 p-2 rounded-md text-[17px] lg:text-2xl lg:p-3 font-semibold bg-linear-to-r from-yellow-200 via-yellow-50 to-yellow-200">
+      <div onClick={()=>navi(`/theaters_shows/${id}/${contextState?._id}/${contextCity?._id}`)} className="fixed flex justify-center bottom-2 md:bottom-4 left-0 right-0 px-3 md:px-8 py-1">
+        <button className="border lg:w-60 md:w-80 w-90 md:text-xl hover:cursor-pointer hover:bg-red-700 bg-red-500 border-gray-400 shadow-2xl hover:shadow-olive-500  p-2 rounded-md text-[17px] lg:text-2xl lg:p-3 font-semibold text-white hover:text-gray-200">
           Book Ticket
         </button>
       </div>

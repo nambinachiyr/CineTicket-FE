@@ -24,11 +24,11 @@ const BookingSuccess = () => {
     }
     return (
         <>
-        <div className='bg-yellow-50/34 p-2 print:hidden'>
-           <img onClick={()=>navi('/')} className='shadow  transition-all duration-300 hover:scale-80 hover:shadow-4xl hover:cursor-pointer bg-yellow-50 hover:shadow-olive-400' src={close} alt="" />
-        <div className='flex flex-col min-h-screen gap-5  justify-center tracking-wider'>
-            <h1 className='text-2xl font-semibold text-center text-yellow-500 '>Your Booking</h1>
-            <div className='border border-amber-300 rounded-xl shadow-xl shadow-yellow-200 flex flex-col gap-4 p-3 bg-yellow-300/10 '>
+        <div className='bg-[#0f0f0f] p-2 print:hidden lg:flex items-center justify-center'>
+           <img onClick={()=>navi('/')} className='shadow text-white fixed top-3 right-3 md:top-20 md:right-30 transition-all duration-300 hover:scale-80 hover:shadow-4xl hover:cursor-pointer bg-red-500 hover:shadow-olive-400' src={close} alt="" />
+        <div className='flex flex-col min-h-screen gap-5 md:w-3/4 lg:w-1/2 justify-center mx-auto tracking-wider'>
+            <h1 className='text-2xl font-semibold  text-center text-red-500 '>Your Booking</h1>
+            <div className='border border-amber-300 text-white rounded-xl shadow-lg shadow-gray-900 flex flex-col gap-4 p-3 bg-gray-300/10 '>
                 {/* <p className='text-right'>status : {bookedTicket.paymentStatus}</p> */}
                 <p className='text-right text-xl'>Price : ₹{bookedTicket?.totalPrice}</p>
                 <div>
@@ -48,7 +48,7 @@ const BookingSuccess = () => {
         {/* Print Button */}
         <div>
             <button onClick={()=>window.print()}
-                className='bg-yellow-500 hover:cursor-pointer hover:bg-yellow-600 text-white font-semibold px-6 py-2 rounded-2xl shadow-lg transition-all duration-300 hover:scale-95'
+                className='bg-red-500 hover:cursor-pointer hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-2xl shadow-lg transition-all duration-300 hover:scale-95'
                 >Print Ticket</button>
         </div>
         </div>
