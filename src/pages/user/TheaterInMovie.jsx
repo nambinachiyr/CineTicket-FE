@@ -176,7 +176,7 @@ const TheaterInMovie = () => {
             {/* Theater Search - Add Here */}
            
             {/* DIsplay the Theater Based on the SelectedDate Default - today */}
-            <div className='flex justify-center mt-5  flex-col gap-2 items-center lg:w-full lg:h-35'>
+            <div className='flex justify-center mt-15  flex-col gap-2 items-center lg:w-full lg:h-35'>
               {
                 filteredTheaterShows.length>0?filteredTheaterShows?.map((show, index) => (
                   <div key={show._id} className='border gap-3 bg-[#1c1c1c] flex flex-col justify-center border-gray-800 rounded-xl flex-wrap w-[90%] md:w-[85%] p-4 md:px-6 hover:border-red-500 transition-all'>
