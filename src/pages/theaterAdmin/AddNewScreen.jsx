@@ -37,11 +37,11 @@ const AddNewScreen = () => {
         }
 
         return (
-            <div className='flex flex-col md:text-xl gap-7 justify-center md:gap-10 p-5 bg-[#e6f2f7] min-h-screen m-1 rounded-lg'>
+            <div className='flex flex-col md:text-xl gap-7 justify-center md:gap-10 p-5 bg-[#070a10] text-white min-h-screen m-1 rounded-lg'>
                 <img onClick={() => navi(-1)} className='w-7 h-7 self-end hover:cursor-pointer' src={close} alt="" />
-                <h1 className='text-3xl self-center text-gray-600'>Create New Screens</h1>
+                <h1 className='text-3xl self-center text-gray-600'>Create Screen</h1>
 
-                <div className={`border-2 md:w-130 self-center border-blue-500 bg-gray-100 border-dashed p-2 flex flex-col gap-1`}>
+                <div className={`border md:w-130 self-center border-white/10 text-white bg-[#111722]  p-2 flex flex-col gap-1`}>
 
                     <div className='text-gray-600 flex flex-col gap-6'>
                         <div className='flex flex-col gap-3'>
@@ -54,8 +54,8 @@ const AddNewScreen = () => {
                             
                         </div>
                         <div className='flex justify-end gap-4 '>
-                            <button onClick={()=>navi(-1)} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Cancel</button>
-                            <button onClick={handleCreateScreen} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Create</button>
+                            <button onClick={()=>navi(-1)} className='border w-23 py-1 text-[17px] font-semibold rounded-xl hover:bg-white/15 border-white/25 text-white hover:cursor-pointer'>Cancel</button>
+                            <button onClick={handleCreateScreen} className='border w-23 py-1 text-[17px] font-semibold rounded-xl bg-red-500 border-white/10 hover:bg-red-600 text-white hover:cursor-pointer'>Create</button>
                         </div>
                     </div>
               </div>  </div>

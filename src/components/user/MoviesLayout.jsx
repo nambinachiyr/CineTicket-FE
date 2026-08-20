@@ -1,82 +1,72 @@
 import React, { useContext, useEffect, useState } from 'react';
 import MovieInstance from '../../axioInstances/user/movieInstance';
-import LoadSpin from './LoadSpinButton';
 import { Link } from 'react-router-dom';
 import { contextValue } from '../../contextvaluses/ContextValue';
 import Location from './Location';
 import LoadSpinContent from './LoadSpinContent';
+import MovieCards from './MovieCards';
 
 const MoviesLayout = () => {
     const [movie, setMovie] = useState([]);
-    const [load, setLoad] = useState(false);
     const [trendMovies, setTrendMovies] = useState([]);
     const [popularity, setPopularity] = useState([]);
+
     const [selectLocation, setSelectLocation] = useState(false);
     const [stateLocation, setStateLocation] = useState(false);
     const [cityLocation, setCityLocation] = useState(false);
+
     const { contextState, setContextState, contextCity, setContextCity } =
         useContext(contextValue);
+
     const [loading, setLoading] = useState(false);
     const [movieError, setMovieError] = useState('');
 
     // Popular Movies Fetching
     async function PopularMovies() {
-        try {
-            console.log(contextCity);
-            const response = await MovieInstance.get(
-                `/${contextState?._id}/${contextCity?._id}/popularity`,
-            );
-            console.log(response?.data?.movies);
-            setPopularity(response?.data?.movies);
-        } catch (err) {
-            console.log(err.message);
-            throw err
-        }
+
+        // console.log(contextCity);
+        const response = await MovieInstance.get(
+            `/${contextState?._id}/${contextCity?._id}/popularity`,
+        );
+        // console.log(response?.data?.movies);
+        setPopularity(response?.data?.movies || []);
+
     }
 
-    // Now_Plaing Movies
+    // Now_Playing Movies
     async function moviesFetch() {
-        try {
-            setLoad(true);
-            console.log(contextCity);
-            const response = await MovieInstance.get(
-                `/${contextState?._id}/${contextCity?._id}/now_playing`,
-            );
-            console.log(response?.data?.movies);
-            setMovie(response?.data?.movies);
-        } catch (err) {
-            console.log(err.message);
 
-            throw err
-        }
-        //  finally {
-        //   setLoad(false);
-        // }
+        const response = await MovieInstance.get(
+            `/${contextState?._id}/${contextCity?._id}/now_playing`,
+        );
+        // console.log(response?.data?.movies);
+        setMovie(response?.data?.movies || []);
+
     }
 
     // Trending movies
     async function trending() {
-        try {
-            console.log(contextCity);
-            const response = await MovieInstance.get(
-                `/${contextState?._id}/${contextCity?._id}/toprated`,
-            );
-            console.log(response?.data?.movies);
-            setTrendMovies(response?.data?.movies);
-        } catch (err) {
-            console.log(err.message);
-            throw err
-        }
+
+
+        const response = await MovieInstance.get(
+            `/${contextState?._id}/${contextCity?._id}/toprated`,
+        );
+        // console.log(response?.data?.movies);
+        setTrendMovies(response?.data?.movies || []);
+
     }
 
     // Retry movie
-
+    //  LOAD ALL MOVIES
     async function loadMovies() {
         try {
             setLoading(true);
             setMovieError('');
 
-            await Promise.all([moviesFetch(), trending(), PopularMovies()]);
+            await Promise.all(
+                [moviesFetch(),
+                trending(),
+                PopularMovies()]);
         } catch (err) {
             setMovieError(
                 !err.response
@@ -92,9 +82,6 @@ const MoviesLayout = () => {
         loadMovies()
     }, [contextState, contextCity]);
 
-    console.log(movie.length, 'NOW_PLAYINg');
-    console.log(trendMovies.length, 'Trending');
-    console.log(popularity.length, 'POPULAR');
 
     function handleOneCity() {
         setSelectLocation(true);
@@ -103,24 +90,16 @@ const MoviesLayout = () => {
     }
 
     function handleOneState() {
-        console.log(':Stet');
-        setSelectLocation(true);
+        selectLocation ? setSelectLocation(false) : setSelectLocation(true);
         setStateLocation(true);
         setCityLocation(false);
     }
 
     // Just Changed
-    if (!contextState && !contextCity) {
-        return (
-            <div>
-                <LoadSpinContent />
-            </div>
-        );
-    }
 
     return (
-        <div className="reletive">
-            <div className="flex items-end justify-end gap-3 text-sm pr-6">
+        <div className="reletive flex w-full flex-col gap-7">
+            <div className="flex justify-end ">
                 <p className=" ">📍 {contextCity?.name},</p>
                 <p
                     onClick={handleOneState}
@@ -132,123 +111,105 @@ const MoviesLayout = () => {
             </div>
 
             <div>
-                {selectLocation && (
-                    <div className="fixed right-2 md:right-5">
+                 {selectLocation && (
+               <div className='fixed inset-0 z-40 w-full bg-black/60 backdrop-blur-[0.2]'>
+                    <div className="fixed top-45  backdrop-blur-lg z-80 right-10 md:right-15">
                         <Location
                             stateLocation={stateLocation}
                             setStateLocation={setStateLocation}
                             cityLocation={cityLocation}
                             setCityLocation={setCityLocation}
+                            handleOneState = {handleOneState}
+                            setSelectLocation={setSelectLocation}
+                            selectLocation={selectLocation}
                         />
                     </div>
+               </div>
                 )}
 
-                <div className="py-4 px-1 md:pt-10 flex flex-col gap-5 text-white bg-[#0f0f0f] min-h-screen">
-                    {loading && <LoadSpinContent />}
-                    {movieError && !loading ? (
-                        <div className="flex flex-col min-h-[60vh] justify-center items-center">
-                            <p>{movieError}</p>
-                            <button className="bg-gray-700 p-3 rounded-lg" onClick={loadMovies}>
-                                Retry
-                            </button>
-                        </div>
-                     ) : (<>
-                        <div className="flex flex-col gap-3">
-                            <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
-                                Now <span className="text-red-500">Playing</span>
-                            </h1>
-                            <div className="flex gap-5 overflow-x-auto">
-                                {/* Now Playing */}
+                {/* Loading */}
+                {
+                    loading && (
+                        <div className='flex min-h-[45vh] items-center backdrop-blur-lg  justify-center'><LoadSpinContent /></div>
+                    )
+                }
 
-                                {movie && movie?.length > 0 ? (
-                                    movie?.map(
-                                        (m) =>
-                                            m.poster_path && (
-                                                <Link key={m._id} to={`/movie/${m._id}`}>
-                                                    <div className=" w-32 md:w-40 lg:w-44 bg-[#1c1c1c] justify-center hover:cursor-pointer shadow-md hover:shadow-xl border-red-500 rounded-xl overflow-hidden shadow-gray-400 transition-all hover:-translate-y-1 duration-300">
-                                                        <img
-                                                            src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`}
-                                                            className="w-full h-45 mx-auto"
-                                                            alt={m?.title}
-                                                        />
-                                                        <p className="text-sm font-semibold p-3 truncate">
-                                                            {m?.title}
-                                                        </p>
-                                                    </div>
-                                                </Link>
-                                            )
-                                    )
-                                ) : (
-                                    ''
-                                )}
+                {/* Error */}
+
+                {
+                    !loading && movieError && (
+                        <div className='flex min-h-[45vh] items-center justify-center'>
+                            <div className='text-center'>
+                                <p className='text-sm text-gray-300'>{movieError}</p>
+                                <button className='mt-4 rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold'>Retry</button>
                             </div>
                         </div>
-                        {/* Trending Movies */}
-                        <div className="flex flex-col gap-3 ">
-                            <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
-                                Trending <span className="text-red-500">Movies</span>{' '}
-                            </h1>
-                            <div className="flex gap-5 overflow-x-auto pb-2">
-                                {trendMovies && trendMovies?.length > 0 ? (
-                                    trendMovies?.map(
-                                        (m) =>
-                                            m.poster_path && (
-                                                <Link key={m._id} to={`/movie/${m._id}`}>
-                                                    <div className=" w-32 md:w-40 lg:w-44 bg-[#1c1c1c] justify-center hover:cursor-pointer shadow-md hover:shadow-xl border-red-500 rounded-xl overflow-hidden shadow-gray-400 transition-all hover:-translate-y-1 duration-300">
-                                                        <img
-                                                            src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`}
-                                                            className="w-full h-45 mx-auto"
-                                                            alt={m?.title}
-                                                        />
-                                                        <p className="text-sm lg:text-[15px] font-semibold p-2 truncate">
-                                                            {m?.title}
-                                                        </p>
-                                                    </div>
-                                                </Link>
+
+                    )
+                }
+
+                {
+                    !loading && !movieError && (
+                        <>
+                            <div className="flex flex-col gap-3">
+                                <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
+                                    Now <span className="text-red-500">Playing</span>
+                                </h1>
+                                <div className="flex gap-5 overflow-x-auto">
+                                    {/* Now Playing */}
+
+                                    {movie && movie?.length > 0 ? (
+                                        movie?.map(
+                                            (movieData) => (<MovieCards movieData={movieData} />
+
+                                            ))) : (
+                                        ''
+                                    )}
+                                </div>
+                            </div>
+                            {/* Trending Movies */}
+                            <div className="flex flex-col gap-3 ">
+                                <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
+                                    Trending <span className="text-red-500">Movies</span>{' '}
+                                </h1>
+                                <div className="flex gap-5 overflow-x-auto pb-2">
+                                    {trendMovies && trendMovies?.length > 0 ? (
+                                        trendMovies?.map(
+                                            (movieData) => (<MovieCards movieData={movieData} />
+
                                             ),
-                                    )
-                                ) : (
-                                    ''
-                                )}
+                                        )
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Popularity Movies */}
+                            {/* Popularity Movies */}
 
-                        <div className="flex flex-col gap-3 ">
-                            <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
-                                Popularity <span className="text-red-500">Movies</span>{' '}
-                            </h1>
-                            <div className="flex gap-5 overflow-x-auto pb-4">
-                                {popularity && popularity?.length > 0 ? (
-                                    popularity?.map(
-                                        (m) =>
-                                            m.poster_path && (
-                                                <Link key={m._id} to={`/movie/${m._id}`}>
-                                                    <div className=" w-32 md:w-40 lg:w-44 bg-[#1c1c1c] justify-center hover:cursor-pointer shadow-md hover:shadow-xl border-red-500 rounded-xl overflow-hidden shadow-gray-400 transition-all hover:-translate-y-1 duration-300">
-                                                        <img
-                                                            src={`https://image.tmdb.org/t/p/w500${m?.poster_path}`}
-                                                            className="w-full h-45 object-cover mx-auto"
-                                                            alt={m?.title}
-                                                        />
-                                                        <p className="text-sm font-semibold p-1 truncate">
-                                                            {m?.title}
-                                                        </p>
-                                                    </div>
-                                                </Link>
+                            <div className="flex flex-col gap-3 ">
+                                <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
+                                    Popularity <span className="text-red-500">Movies</span>{' '}
+                                </h1>
+                                <div className="flex gap-5 overflow-x-auto pb-4">
+                                    {popularity && popularity?.length > 0 ? (
+                                        popularity?.map(
+                                            (movieData) => (<MovieCards movieData={movieData} />
+
                                             ),
-                                    )
-                                ) : (
-                                    ''
-                                )}
+                                        )
+                                    ) : (
+                                        ''
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                        </>
-          )}
-                    </div>
+
+
+                        </>)}
             </div>
-
         </div>
+    
+        
     );
 };
 

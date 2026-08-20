@@ -2,6 +2,7 @@ import React from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import leftArrow from "../../assets/left-arrow.png"
 import bookingInstance from '../../axioInstances/user/bookingInstance'
+import toast from 'react-hot-toast'
 
 const SingleBookingTicket = () => {
     const data = useLoaderData()
@@ -24,14 +25,16 @@ const SingleBookingTicket = () => {
         try{
              const response = await bookingInstance.put(`/cancel/${data?._id}`)
              console.log(response?.data?.cancelData)
+             toast.success("Deleted")
              navi(-1)
         }catch(err){
             console.log(err.message)
+            toast.error(err?.response?.data?.message)
         }
     }
   return (
     <div>
-        <div className='bg-[#fffee4] lg:px-20 min-h-screen flex flex-col object-contain gap-3 p-4 md:text-xl lg:text-2xl'>
+        <div className='bg-[#070a10] text-white lg:px-20 min-h-screen flex flex-col object-contain gap-3 p-4 md:text-xl lg:text-2xl'>
             <img onClick={()=>navi(-1)} className='w-8 h-8 md:w-10 md:h-12 lg:w-12 lg:h-12  p-1 ml-3 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full'  src={leftArrow} alt="" />
             <img className=' h-50 md:h-50 md:w-50' src={`https://image.tmdb.org/t/p/original${data?.movie?.poster_path?data?.movie?.poster_path:data?.movie?.backdrop_path}`} alt="" />
             <p className='text-2xl md:text-3xl text-center font-semibold'>{data?.movie?.title}</p>
@@ -66,7 +69,7 @@ const SingleBookingTicket = () => {
             <hr></hr>
             <p>Your BookingID : {data?._id}</p>
 
-        <button onClick={handleCancelled} className='border py-2 bg-amber-300 text-gray-800 text-lg'>Cancel</button>
+        <button onClick={handleCancelled} className='border py-2 bg-red-500 text-white border-white/10 rounded-2xl text-lg'>Cancel</button>
         </div>
     </div>
   )

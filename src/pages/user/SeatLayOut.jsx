@@ -69,7 +69,7 @@ const SeatLayOut = () => {
     const seats = selectedSeats.map((s) => s.seatNumber);
     console.log(seats);
     try {
-      setLoad(true)
+      // setLoad(true)
       setIsprocess(true)
       //   const ok = window.confirm("Proceed to payment ? ")
       //   if(!ok) return;
@@ -80,10 +80,10 @@ const SeatLayOut = () => {
       console.log("CREATE ORDER RES : ", response?.data)
       const order = response?.data?.order;
       console.log(order, "ORDER");
-      return openRazorPay(order, showid, seats, navi, setLoad, setIsprocess);
+      return openRazorPay(order, showid, seats, navi,  setIsprocess);
     } catch (err) {
       console.log(err.response);
-      setLoad(false)
+      // setLoad(false)
       setIsprocess(false)
     }
     
@@ -112,25 +112,25 @@ const SeatLayOut = () => {
   // SeatLayOut Design
   return (
     <>
-      <div className="bg-[#0f0f0f] px-2 pt-2 relative">
-        <img onClick={() => navi(-1)} className='px-2 fixed lg:w-10 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
+      <div className="bg-[#070a10] min-h-screen  px-3 py-4 text-white relative">
+        <img onClick={() => navi(-1)} className='px-2 py-1 fixed lg:w-10 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-[#070a10] border-white/10 rounded-full' src={backArrow} alt="" />
 
         {isprocess && (
-          <div className="fixed bg-black/40 inset-0 flex justify-center items-center ">
+          <div className="fixed bg-black/70 inset-0 flex justify-center items-center backdrop-blur-sm ">
             <LoadSpinContent />
           </div>
         )}
         {
-          showPopUp && <div className='absolute inset-0 border flex justify-center items-center'>
-            <div className='w-2xs md:w-2xl p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center items-center border bg-yellow-300/80 border-gray-400 rounded-ee-[60px] rounded-ss-[60px] '>
+          showPopUp && <div className='absolute inset-0 border flex justify-center items-center backdrop-blur-md'>
+            <div className='w-2xs md:w-2xl p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center rounded-2xl items-center border border-white/10 bg-[#111722] sm:p-6 shadow-2xl'>
               <h1 className='text-xl md:text-2xl'>Confirm Booking</h1>
               <div className='flex md:text-xl flex-col flex-wrap gap-2 md:gap-4'>
                 <p className='flex flex-wrap'>Seats : [{selectedSeats.map((s, index) => <span key={s.seatNumber} className='flex flex-row'>{s.seatNumber}{selectedSeats.length - 1 === index ? "" : ','}</span>)}]</p>
                 <p className='font-semibold'>Total : ₹{show.price * selectedSeats.length}</p>
               </div>
               <p className='flex gap-8 md:text-lg'>
-                <span className='border py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-yellow-600 hover:shadow-lg' onClick={() => setShowPopUp(false)}>Cancel</span>
-                <span className='border py-1 px-3 rounded-sm hover:cursor-pointer hover:bg-yellow-600 hover:shadow-lg' onClick={handle_proceed}>Proceed</span>
+                <span className='rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/5 hover:cursor-pointer' onClick={() => setShowPopUp(false)}>Cancel</span>
+                <span className='rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-red-600 bg-red-500 hover:cursor-pointer' onClick={handle_proceed}>Proceed</span>
               </p>
             </div>
           </div>
@@ -157,7 +157,7 @@ const SeatLayOut = () => {
                 <p
                   onClick={() => handleSeatBooking(s)}
                   key={s.seatNumber}
-                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-white' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !== contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 h-8 rounded-sm text-neutral-700 rounded-se-xl border border-gray-300 text-red-600 text-center flex justify-center items-center `}
+                  className={`hover:cursor-pointer ${selectedSeats?.some((seat) => seat.seatNumber === s.seatNumber) ? 'border-green-400 border-4 border-dashed text-neutral-800' : `${s.status === 'booked' ? 'bg-gray-400  hover:cursor-not-allowed text-gray-400 text-xs' : `${s.heldBy && s.heldBy !== contextEmail ? 'border-yellow-400 border-4 border-dashed' : ''}`}`} w-8 h-8 rounded-sm  rounded-se-xl border border-gray-300 text-red-600 text-center bg-[#] flex justify-center items-center `}
                 >
                   {s.column}
                 </p>
@@ -171,19 +171,19 @@ const SeatLayOut = () => {
               <p
                 className={`w-3 h-3 rounded-full border-2 border-gray-400 bg-gray-400 `}
               ></p>
-              <span>Sold</span>
+              <span className='text-neutral-600 '>Sold</span>
             </div>
             <div className="flex flex-col justify-center items-center ">
               <p className="w-3 h-3 rounded-full border-2 border-neutral-700"></p>
-              <span>available</span>
+              <span className='text-neutral-600 '>available</span>
             </div>
             <div className="flex flex-col justify-center items-center ">
               <p className="w-3 h-3 bg-yellow-500 rounded-full border-2 border-yellow-500"></p>
-              <span>Filling Fast</span>
+              <span className='text-neutral-600 '>Filling Fast</span>
             </div>
             <div className="flex flex-col justify-center items-center ">
               <p className="w-3 h-3 rounded-full border-2 border-green-500 bg-green-500"></p>
-              <span>selected</span>
+              <span className='text-neutral-600 '>selected</span>
             </div>
           </div>
 
@@ -215,7 +215,7 @@ const SeatLayOut = () => {
 
             <button
               onClick={handlePay_Booking} disabled={selectedSeats.length === 0}
-              className={`border min-w-2xs p-3 text-sm bg-blue-400 text-gray-50 tracking-widest font-bold rounded-t-3xl rounded-e-2xl hover:shadow-olive-500 hover:shadow-2xl  hover:cursor-pointer ${selectedSeats.length === 0 ? "hover:cursor-not-allowed opacity-50 " : "shadow-2xl"}`}
+              className={`border min-w-2xs p-3 text-sm bg-red-500 text-gray-50 tracking-widest font-bold rounded-t-3xl rounded-e-2xl hover:shadow-olive-500 hover:shadow-2xl disabled:bg-gray-700  hover:cursor-pointer ${selectedSeats.length === 0 ? "hover:cursor-not-allowed opacity-50 " : "shadow-2xl"}`}
             >{load ? <LoadSpin /> : "Confirm & Pay"}
 
             </button>

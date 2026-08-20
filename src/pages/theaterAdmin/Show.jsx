@@ -6,6 +6,7 @@ import theaterInstance from '../../axioInstances/theaterAdmin/theaterAdminDash'
 import toast from 'react-hot-toast'
 import bin from "../../assets/bin.png"
 import close from "../../assets/close (1).png"
+import LoadSpinButton from "../../components/user/LoadSpinButton"
 
 const Show = () => {
     const showData = useLoaderData()
@@ -14,6 +15,7 @@ const Show = () => {
     const [editId, setEditId] = useState('')
     const [editData, setEditData] = useState(null)
     const [screens, setScreens] = useState([])
+    const [load ,setLoad] = useState(false)
     const navi = useNavigate()
 
     const lang = {
@@ -22,17 +24,19 @@ const Show = () => {
         hi: "Hindi",
         ml: "Malayalam",
         te: "Telugu",
-        kn: "Kannadam",
+        kn: "Kannada",
     }
 
     useEffect(() => {
         async function fetchingScreen() {
             try {
+                
                 const response = await theaterInstance.get('/allscreen')
                 setScreens(response?.data?.screen)
             } catch (err) {
                 console.log(err.message)
             }
+           
         }
         fetchingScreen()
     }, [])
@@ -41,6 +45,7 @@ const Show = () => {
         console.log(s)
         try {
             // console.log(editData.screen._id)
+            setLoad(true)
             const updatedData = {
                 screen: editData.screen._id|| s.screen._id,
                 movie: editData.movie._id || s.movie._id,
@@ -68,7 +73,9 @@ const Show = () => {
             console.log(err.response?.data,"Error")
             console.log(err.message,"err")
             toast.error(err.response?.data?.message)
-        }
+        } finally{
+                setLoad(false)
+            }
     }
     console.log(editData)
     console.log(editId)
@@ -81,20 +88,25 @@ const Show = () => {
            toast.success(response?.data?.message)
         //  console.log("yes")
         }catch(err){
-            console.log(response?.data?.message)
+            console.log(err.response?.data?.message)
             toast.error(err.response?.data?.message)
         }
     }
 
 
     return (
-        <div className='flex flex-col md:text-xl gap-7 justify-center md:gap-10 p-5 bg-[#0f0f0f] text-gray-200 min-h-screen m-1 rounded-lg'>
-            <img src={close} onClick={()=>navi(-1)} className='w-7 h-7 self-end hover:scale-100 hover:cursor-pointer' alt='close' />
-            <h1 className='text-xl self-center text-gray-400'>All Shows Available here</h1>
+        <div className='min-h-screen bg-[#070a10] px-4 py-6 text-white'>
+            <img src={close} onClick={()=>navi(-1)} className='w-7 h-7 invert bg-white/10 p-1 border-white/50 self-end hover:scale-100 hover:cursor-pointer' alt='close' />
             {
+                load?<div><LoadSpinButton/></div>:(
+            <div className='flex flex-col justify-center items-center'>
+                 <h1 className='text-lg uppercase tracking-[0.16em] text-gray-500 text-center'>Shows </h1>
+            
+              <div className='grid grid-cols-1 lg-grid-col-2'>
+                {
                 showData?.length > 0 ? (
                     showData?.map((s) => (
-                        <div key={s?._id} className={`border-2 relative flex ${showData.length>1?'lg:grid gird-cols-2':'grid grid-cols-1'} gap-3 md:text-2xl md:w-130 w-80 p-3 self-center ${editId === s._id ? 'border-blue-500 bg-gray-100 border-dashed' : s?.showStatus === "Completed" ? 'border-green-500 border-dashed' : s?.showStatus === "Cancelled" ? 'border-red-500 border-dashed' : 'border-yellow-500 border-dashed'} p-2 flex flex-col gap-1`}>
+                        <div key={s?._id} className={`border w-[320px] relative bg-[#111722] flex border-white/10 ${showData.length>1?'lg:grid gird-cols-2':'grid grid-cols-1'} gap-3 md:text-xl md:w-[450px] p-3 self-cente rounded-xl mt-4 relative flex flex-col`}>
                             {
                                 screens?.length > 0 && editId === s?._id ? (
                                     <div className='text-gray-600 flex flex-col gap-6'>
@@ -160,12 +172,12 @@ const Show = () => {
                                             <button onClick={() => {
                                                 setEditId('')
                                                 setEditData(null)
-                                            }} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Cancel</button>
-                                            <button onClick={()=>handleUpdateShow(s)} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Save</button>
+                                            }} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:bg-white/15 hover:text-white hover:cursor-pointer'>Cancel</button>
+                                            <button onClick={()=>handleUpdateShow(s)} className='border-white/10 text-white hover:bg-red-500/80 bg-red-500 w-23 py-1 text-[17px] font-semibold rounded-sm hover:cursor-pointer'>Save</button>
                                         </div>
                                     </div>
                                 ) : (
-                                    <>
+                                    <div className='flex flex-col gap-1'>
                                         <h1><span>ScreenName: </span><span>{s?.screen?.name}</span></h1>
                                         <p><span>Movie:</span> <span>{s?.movie?.title}</span></p>
                                         <p><span>Language: </span>{lang[s?.movie?.original_language]}</p>
@@ -183,12 +195,15 @@ const Show = () => {
                                                 setEditData(s)
                                             }} className=' ml-auto'><img className='w-6  hover:shadow-olive-50 hover:shadow-2xl hover:scale-110 hover:cursor-pointer' src={edit} alt="" /></button>
                                      
-                                    </>
+                                    </div>
                                 )}
                         </div>
                     ))
                 ) : (<p>No Shows</p>)
             }
+            </div>
+            
+            </div>)}
         </div>
     )
 }

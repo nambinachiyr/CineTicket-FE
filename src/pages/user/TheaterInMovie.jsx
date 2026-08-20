@@ -107,43 +107,43 @@ const TheaterInMovie = () => {
 
 
   return (
-    <div className='bg-[#0f0f0f] text-white  p-4 min-h-screen'>
-      <img onClick={() => navi(-1)} className='p-2 w-10 bg-[#464656] hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-red-500 rounded-full' src={backArrow} alt="" />
-     <div className='flex justify-center mt-3'>
+    <div className='bg-[#070a10] text-white px-3 sm:px-5 md:px-8 py-4 min-h-screen'>
+      <img onClick={() => navi(-1)} className='p-2 w-10 bg-[#464656] hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-red-500/50 active:scale-95 rounded-full' src={backArrow} alt="" />
+     <div className='flex max-w-4xl mx-auto justify-center my-5'>
        <input
   type="text"
   value={theaterSearch}
   onChange={(e) => setTheaterSearch(e.target.value)}
   placeholder="Search theater name..."
   className="
-  w-full md:w-3/4 mx-auto
-    lg:w-1/2 
-    bg-[#1c1c1c]
-    border border-gray-700
-    text-white
+  w-full  
+    bg-[#111722]
+    border border-white/10
+    text-white text-sm
     placeholder:text-gray-500
     px-4 py-3
-    rounded-lg
+    rounded-xl
     focus:outline-none
-    focus:border-red-500
+    focus:border-red-500/50
+    sm:text-base
   "
 />
 
+
      </div>
       {
-        validShows.length === 0 ? <p className='flex min-h-screen justify-center items-center text-xl text-gray-700'>No shows ...</p>
+        validShows.length === 0 ? <p className='flex min-h-screen justify-center items-center text-xl text-gray-700'>No upcoming shows are available for this movie ...</p>
 
           :
-          <div className='p-3 tracking-wider lg:grid lg:grid-cols-2 flex flex-col gap-5  md:gap-7'>
-
+          <div className='mt-7 mx-auto lg:grid lg:grid-cols-2  gap-7'>
+         <div className='flex flex-col items-center gap-5'>
             {
               show?.bookingStatus === "Open" && show?.showStatus !== "Completed" ? (
-                <div key={show._id} className='flex lg:flex-col justify-center gap-7 items-center text-lg  font-semibold'>
-                  <img className='w-30 md:w-50 object-cover md:h-50 lg:h-55 rounded-lg' src={`https://image.tmdb.org/t/p/original${show?.movie?.poster_path}`} alt="Movie Poster" />
-                  <h1 className='text-wrap'>{show.movie.title}</h1>
-                  <div className='lg:flex flex-wrap hidden text-sm px-20'>
-                    {/* calender Section */}
-                    {/* implement do did not work the past date */}
+                <div key={show._id} className='flex lg:flex-col gap-7 items-center text-lg  font-semibold'>
+                  <img className='w-30 md:w-50 object-cover md:h-50 lg:h-55 rounded-lg' src={`https://image.tmdb.org/t/p/original${show?.movie?.poster_path}`} alt= {show.movie.title || "Movie Poster"} />
+                  <h1 className='text-wrap max-w-xs text-center text-base font-semibold sm:text-lg lg:text-xl'>{show.movie.title}</h1>
+                  <div className='lg:flex flex-wrap justify-center gap-2 lg:max-w-[280px] hidden text-sm px-20'>
+                   
                     {
 
                       removeDuplicates?.map((d, index) => (
@@ -160,10 +160,10 @@ const TheaterInMovie = () => {
 
 
             }
+            </div>
             {/* LG:Hidden */}
-            <div className='flex flex-wrap lg:hidden md:text-xl px-20'>
-              {/* calender Section */}
-              {/* implement do did not work the past date */}
+            <div className='flex flex-wrap my-8 sm:my-15 items-center justify-center gap-2 lg:hidden md:text-xl px-20'>
+
               {
                 removeDuplicates?.map((d, index) => (
                   <p key={d} onClick={() => handleTheaters(d)}

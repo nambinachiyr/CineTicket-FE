@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import theaterAdminInstance from '../../axioInstances/theaterAdmin/theaterAdminDash'
 import toast from 'react-hot-toast'
-import screenInstance from '../../axioInstances/theaterAdmin/screenInstance'
-import theaterInstance from '../../axioInstances/theaterAdmin/theaterInstance'
 import movieInstance from '../../axioInstances/theaterAdmin/movieInstance'
 import close from "../../assets/close (1).png"
-import search from "../../assets/search.png"
+
 
 const AddNewShow = () => {
 
     const navi = useNavigate()
+    const [loading,setLoading] = useState(false)
     const [screen, setScreen] = useState('')
     const [movie,setMovie] = useState('')
     const [showD,setShowD] = useState('')
@@ -33,6 +32,7 @@ const AddNewShow = () => {
         }
 
         try {
+            setLoading(true)
             setMsg('')
            console.log("Run")
             const response = await theaterAdminInstance.post('/create/show', { screen:screen,movie:movie,showDate:(showD.split('-').reverse().join('-')),showTime:showT,price:price, })
@@ -51,7 +51,10 @@ const AddNewShow = () => {
         } catch (err) {
              
             console.log(err.message)
-            toast.error(err.response?.data?.message)
+            toast.error(err.response?.data?.message || "Unabke to create show")
+        }
+        finally{
+            setLoading(false)
         }
     }
 
@@ -86,11 +89,11 @@ const AddNewShow = () => {
     
     console.log(filteredMovies)
     return (
-        <div className='flex flex-col md:text-xl gap-7 justify-center md:gap-10 p-5 bg-[#e6f2f7] min-h-screen m-1 rounded-lg'>
-            <img onClick={() => navi(-1)} className='w-7 h-7 self-end hover:cursor-pointer' src={close} alt="" />
-            <h1 className='text-3xl self-center text-gray-600'>Create New Shows</h1>
-
-            <div className='flex flex-col gap-3'>
+        <div className='min-h-screen mx-auto my-auto  bg-[#070a10] px-4 py-6 text-white'>
+            <img onClick={() => navi(-1)} className='w-7 h-7 p-1 invert hover:bg-white/80 self-end hover:cursor-pointer' src={close} alt="" />
+            <h1 className='text-3xl text-center text-gray-600'>Create Show</h1>
+           <div className='flex flex-col justify-center items-center my-5'>
+            <div className='flex flex-col gap-3 border-white/10 p-5 bg-[#111722] w-full max-w-[520px]'>
                 <h1><span>ScreenName: </span>
                     <select className='border w-full focus:outline-none border-gray-600 px-2 text-yellow-700 py-1' type="text"
                         value={screen || ''} 
@@ -140,7 +143,7 @@ const AddNewShow = () => {
                 <p><span>showTime :</span><input type='time' value={showT} onChange={(e) => setShowT(e.target.value )} className='border w-full focus:outline-none border-gray-600 px-2 text-yellow-700 py-1' /></p>
             </div>
             <p className='text-center text-red-500 text-xl font-semibold tracking-wide'>{msg? msg:""}</p>
-            <div className='flex justify-end gap-4 '>
+            <div className='flex flex-col-reverse w-xs md:w-sm lg:w-lg gap-4 mt-5'>
                 <button onClick={() => {
                     setPrice('')
                     setScreen('')
@@ -150,8 +153,9 @@ const AddNewShow = () => {
                     setSearchMovie('')
                     setSelectedMovie('')
                     setMsg('')
-                }} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Cancel</button>
-                <button onClick={handleCreateShow} className='border w-23 py-1 text-[17px] font-semibold rounded-sm hover:shadow-2xl shadow-olive-200 hover:cursor-pointer'>Create</button>
+                }} className='border py-1 text-[17px] w-full font-semibold rounded-xl hover:cursor-pointer border-white/10 bg-white/10 hover:bg-white/15'>Cancel</button>
+                <button onClick={handleCreateShow} className='border py-1 bg-red-500 border-white/5 hover:bg-red-600 text-[17px]  font-semibold rounded-xl hover:cursor-pointer'>Create</button>
+            </div>
             </div>
         </div>
  

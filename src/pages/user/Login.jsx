@@ -22,15 +22,17 @@ const Login = () => {
     e.preventDefault()
     try {
       setLoading(true)
-      if (email === '') {
-        setError("Please Enter Your Email")
+      if (!email) {
+        setLoading(false)
+        return setError("Please Enter Your Email")
       }
-      if (password === '') {
-        setError("Please Enter Your Password")
+      if (!password) {
+        setLoading(false)
+       return setError("Please Enter Your Password")
       }
       const response = await authInstance.post('/login', { email: email, password: password })
       setUserData(response?.data)
-      console.log(response.data)
+      // console.log(response.data)
       setContextUser(response?.data?.existUser)
       setContextEmail(response?.data?.existUser?.email)
       
@@ -52,19 +54,19 @@ const Login = () => {
   }
 
   return (
-    <div className='flex justify-center items-center min-h-screen rounded-2xl bg-linear-to-b from-yellow-50 via-yellow-200 to-yellow-50'>
-      <form onSubmit={handleLogin} className='border hover:border-amber-500 hover:border-2 hover:rounded-t-4xl flex flex-col gap-8 md:gap-15 mx-auto font-semibold w-full max-w-md rounded-xl p-6 md:p-9 bg-gray-100 shadow-yellow-100 shadow-2xl'>
+    <div className='flex justify-center tracking-widest text-white items-center min-h-screen rounded-2xl px-4 py-8 bg-[#070a10]'>
+      <form onSubmit={handleLogin} className='border hover:border-white/10 bg-[#111722] max-w-[310px] sm:max-w-sm rounded-2xl flex flex-col mx-auto gap-10 font-semibold w-full sm:p-3 px-2 md:p-9 shadow-[0_20px_50px_rgba(0,0,0,0.35)]'>
         <h1 className='mx-auto w-fit text-xl md:text-3xl font-bold'>LogIn</h1>
         <div className='flex flex-col md:text-xl space-y-10  justify-center items-center'>
-          <input type='email' onBlur={() => setError('')} value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter Your Email' className='w-full text-center focus:text-left hover:cursor-pointer hover:placeholder-transparent max-w-md px-9  h-11 border border-transparent hover:border-amber-500  hover:rounded-t-4xl focus:outline-none rounded-md focus:border-amber-500 p-4' />
-          <input type='password' onBlur={() => setError('')} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Enter Password' className='w-full max-w-md px-9 focus:text-left hover:cursor-pointer text-center hover:placeholder-transparent h-11 border border-transparent  hover:border-amber-500  hover:rounded-b-4xl focus:outline-none rounded-md focus:border-amber-500 p-4' />
+          <input type='email' onBlur={() => setError('')} value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Enter Your Email' className='w-full text-center focus:text-left hover:cursor-pointer bg-[#0b0f17]  hover:placeholder-text-gray-600 focus:border-red-500/60 max-w-md px-9  h-11 border border-transparent  focus:outline-none rounded-md  p-4' />
+          <input type='password' onBlur={() => setError('')} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Enter Password' className='w-full max-w-md px-9 focus:text-left hover:cursor-pointer bg-[#0b0f17]  hover:placeholder-text-gray-600 focus:border-red-500/60 text-center hover:placeholder-transparent h-11 border border-transparent focus:outline-none rounded-md p-4' />
           {
             error ? <p className='font-light text-sm text-red-500' >{error}</p> : ""
           }
         </div>
         <div className='flex gap-2 items-center justify-center flex-col '>
-          <button className='border-transparent w-full py-3 text-md md:text-xl hover:text-white hover:shadow-md shadow-yellow-300 focus:outline-none hover:rounded-4xl rounded-lg hover:bg-amber-300 hover:cursor-pointer'>{loading ? <LoadSpinButton /> : "LogIn"}</button>
-          < p className='text-xs font-light text-center'>Create Your Account - <Link to='/signup'><span className='hover:underline text-blue-600 hover:cursor-pointer' > signup</span></Link></p>
+          <button disabled={loading} className='border-transparent py-3 text-md font-bold tracking-[0.1em] md:text-xl hover:bg-red-500 w-[90%] text-white hover:shadow-mdfocus:outline-none hover:rounded-4xl rounded-lg disabled:cursor-not-allowed disabled:bg-gray-700  hover:cursor-pointer'>{loading ? <LoadSpinButton /> : "LogIn"}</button>
+          < p className='text-xs font-light text-center my-2'>Create Your Account - <Link to='/signup'><span className='hover:underline text-blue-600 hover:cursor-pointer' > signup</span></Link></p>
         </div>
 
       </form>

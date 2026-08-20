@@ -2,8 +2,12 @@ import React from 'react'
 
 const LoadSpinContent = () => {
   return (
-    <div className='w-14 h-14 lg:w-15 lg:h-15  animate-spin rounded-full border-2 border-t-white border-b-yellow-500 border-l-green-600 border-r-blue-500 mx-auto'>
-        <p className='w-13 h-13 lg:w-14 lg:h-14 rounded-full bg-gray-200 '> </p>
+    <div className='w-12 h-12 lg:w-12 lg:h-12  animate-spin rounded-full border-2  border-t-red-600'>
+        <p className='w-11 h-11 lg:w-11 lg:h-11 rounded-full bg-gray-200 '>
+        
+
+        
+           </p>
     </div>
   )
 }

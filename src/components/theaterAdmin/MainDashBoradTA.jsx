@@ -19,13 +19,17 @@ const MainDashBoradTA = () => {
             try {
                 setLoading(true)
                 const response = await theaterInstance.get('/dash')
-                console.log(response?.data)
-                setData(response?.data)
-                setTheaterName(data?.admin?.theaterId?.name)
-                setTheaterAdd(data?.admin?.theaterId?.address)
-                setLoading(false)
+                console.log("Dash",response.data)
+                const dashData = response?.data
+                console.log(dashData)
+                setData(dashData)
+                setTheaterName(dashData?.admin?.theaterId?.name || "")
+                setTheaterAdd(dashData?.admin?.theaterId?.address || "")
+                
             } catch (err) {
-                console.log(err.response?.data?.message)
+                console.log(err.message,"err")
+                console.log("status:",err.response?.status)
+                console.log("data:",err.response?.data)
                 // setLoading(false)
                 return []
             } finally {
@@ -36,10 +40,11 @@ const MainDashBoradTA = () => {
         dashboardDetails()
     }, [])
     
-    console.log(data?.admin?.theaterId?.name)
+    // console.log(data?.admin?.theaterId?.name)
     function handleSideBar() {
         setOpenSideBar(true)
     }
+    // console.log(data)
 
     useEffect(() => {
         const handleResize = () => {
@@ -57,63 +62,81 @@ const MainDashBoradTA = () => {
         }
     }, [])
     return (
-        <div className='flex relative flex-col gap-1 justify-center items-center py-2'>
-            <img onClick={handleSideBar} className='self-start hover:cursor-pointer  md:hidden ml-3 p-1 rounded-lg border border-blue-600 hover:shadow-2xl hover:scale-90 duration-200 transition-all' src={menu} alt="Menu button" />
-            <div className='md:block z-50'>  {openSideBar && <SideBarTA data={data} setOpenSideBar={setOpenSideBar} />}</div>
-            {loading ? <LoadSpinContent /> :                     
-                <div className='flex  flex-col gap-5'>
-                    <div className='flex w-full items-end px-3 md:flex-row border-b justify-center border-gray-700 text-red-700 flex-col lg:text-xl gap-1'>
-                        <p>{theaterName || ''} , </p>
-                        <p className=''>{theaterAdd || ''}</p>
+        <div className='relative min-h-screen w-full bg-[#070a10] text-white'>
+            <img onClick={handleSideBar} className='self-start hover:cursor-pointer  md:hidden ml-3 p-1 rounded-lg border border-white/10 bg-[#111722] hover:scale-90 duration-200 transition-all' src={menu} alt="Menu button" />
+                {openSideBar && <SideBarTA data={data} setOpenSideBar={setOpenSideBar} />}
+            {loading ?<div className='flex min-h-[70vh] w-full items-center justify-center'> <LoadSpinContent /></div> :                     
+                <main className='w-full px-4 py-6 md:ml-[240px] md:w-[calc(100%-240px)] md:px-6 lg:px-8'>
+                {/* <div className='px-4 py-6 w-full md:ml-[240px] md:px-6 lg:px-8'> */}
+                    <div className='border-b border-white/10 pb-4'>
+                        <p className='mt-1 text-xl font-bold sm:text-2xl'>{theaterName || ''} , </p>
+                        <p className='mt-1 text-xs text-gray-500 sm:text-sm'>{theaterAdd || ''}</p>
                     </div>
-                    <h1 className='text-2xl text-center tracking-wider'>Hi, <span className='font-semibold text-red-400'>{data?.admin?.name}</span></h1>
-                    
-                    <div className='grid grid-cols-3 gap-3 justify-center items-center px-6'>
-                        <p className='col-span-1 row-span-2'></p>
-                        <div onClick={()=>navi('/theater-admin/screens')} className=' border hover:border-red-500 hover:bg-white hover:text-black hover:cursor-pointer border-dashed text-center font-semibold flex flex-col gap-2 tracking-wider text-amber-50 text-xl p-2'>
-                            <h1>Screens</h1>
-                            <p className=''>{data?.totalScreens}</p>
+                    <h1 className='text-lg sm:text-xl my-6 text-center tracking-wider'>Hi, <span className='font-semibold text-red-400'>{data?.admin?.name}</span></h1>
+                    {/* <div className='mx-auto border-3 '> */}
+                    <div className='grid grid-cols-2  mx-auto mr-5 gap-3 lg:grid-cols-4 sm:gap-4 justify-center items-center px-6'>
+                        {/* <p className='col-span-1 row-span-2'></p> */}
+                        <div onClick={()=>navi('/theater-admin/screens')} className=' border rounded-xl border-white/10 bg-[#111722] p-4 text-left hover:cursor-pointer font-semibold tracking-wider text-xl'>
+                            <h1 className="text-xs text-gray-500 sm:text-sm">Screens</h1>
+                            <p className='mt-2 text-2xl font-bold sm:text-3xl'>{data?.totalScreens}</p>
                         </div>
                         <div onClick={()=>navi('/theater-admin/shows')
                         
-                        }  className=' border hover:border-red-500 hover:bg-white hover:text-black hover:cursor-pointer border-dashed text-center font-semibold flex flex-col gap-2 tracking-wider text-amber-50 text-xl p-2'>
+                        }   className=' border rounded-xl border-white/10 bg-[#111722] p-4 text-left hover:cursor-pointer font-semibold tracking-wider text-xl'>
 
-                            <h1>Shows</h1>
-                            <p>{data?.totalShows}</p>
+                            <h1 className="text-xs text-gray-500 sm:text-sm">Shows</h1>
+                            <p  className='mt-2 text-2xl font-bold sm:text-3xl'>{data?.totalShows}</p>
                         </div>
-                        <div className=' border border-dashed text-center font-semibold flex flex-col gap-2 tracking-wider text-amber-50 text-xl p-2'>
+                        <div  className=' border rounded-xl border-white/10 bg-[#111722] p-4 text-left hover:cursor-pointer font-semibold tracking-wider text-xl'>
 
-                            <h1>Booking</h1>
-                            <p>{data?.totalBooking}</p>
+                            <h1 className="text-xs text-gray-500 sm:text-sm">Booking</h1>
+                            <p  className='mt-2 text-2xl font-bold sm:text-3xl'>{data?.totalBooking}</p>
                         </div>
-                        <div className=' border border-dashed text-center font-semibold flex flex-col gap-2 tracking-wider text-amber-50 text-xl p-2'>
+                        <div className=' border rounded-xl border-white/10 bg-[#111722] p-4 text-left hover:cursor-pointer font-semibold tracking-wider text-xl'>
 
-                            <h1>Revenue</h1>
-                            <p>{data?.TotalRevenue}</p>
+                            <h1 className="text-xs text-gray-500 sm:text-sm">Revenue</h1>
+                            <p  className='mt-2 text-2xl font-bold sm:text-3xl'>{data?.TotalRevenue}</p>
                         </div>
                     </div>
-                    <div className='md:flex md:justify-center md:items-center min-h-[60vh]'>
+                    <div className='mt-8 w-[100%] rounded-xl border border-white/10 bg-[#111722]'>
                     
-                        <div className='border border-2 border-gray-200 text-white md:w-120 mx-1'>
-                            <p className='text-center border-b p-1 text-red-600 border-gray-200'>Popular Movies</p>
-                            <p className='flex justify-between py-1 px-2 text-gray-300 font-semibold'>
-                                <span className='border-r-2 w-40'>Movies</span>
-                                <span className='border-r-2 w-26 '>BookingCount</span>
-                                <span>Revenue</span>
-                            </p>
-                            {
-                                data?.popularMovie?.map((movie,index)=>(
-                                   <div className='flex justify-between px-3 py-1 items-center border-t' key={index}>
-                                    <p className='border-r-2 w-40'>{movie.title}</p>
-                                    <p className='border-r-2 px-3'>{movie.bookingCount}</p>
-                                    <p>{movie.revenue}</p>
-                                   </div>
-                                ))
-                            }
+                        <div className='border-b px-4 py-3 border-white/10'>
+                            <p className='text-base font-semibold sm:text-lg'>Popular Movies</p>
+                            
+                        </div>
+                        <div className='overflow-x-auto'>
+                            <div className=' min-w-[520px]'>
+                                <div className='grid grid-cols-[230px_80px_80px] lg:grid-cols-[1fr_120px_120px]  gap-3 border-b border-white/10 px-4 py-3 text-xs font-medium text-gray-500 sm:text-sm'>
+                                   <span>Movie</span>
+                                   <span>Bookings</span>
+                                   <span>Revenue</span>
+                                </div>
+
+                                {data?.popularMovie?.length>0?(
+                                    data?.popularMovie.map((movie,index)=>(
+                                        <div key={movie?._id || index}
+                                        className='grid grid-cols-[250px_80px_80px] lg:grid-cols-[1fr_120px_120px] gap-3 border-b border-white/5 px-1 py-3 text-sm'>
+                                          <p className='truncate text-gray-200'>
+                                            {movie?.title}
+                                          </p>
+                                          <p className='text-gray-400'>
+                                            {movie?.bookingCount}
+                                          </p>
+                                          <p className='text-gray-400'>{movie.revenue}</p>
+                                        </div>
+                                    ))
+                                    
+                                ):(
+                                        <p className='px-4 py-8 text-center text-sm text-gray-500'>No Booking data available</p>
+                                    )
+                                }
+
+                            </div>
+
                         </div>
                     </div>
-                </div>
-                  
+                {/* </div> */}
+                  </main>
             }
         </div>
     )

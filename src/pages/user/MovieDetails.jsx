@@ -6,45 +6,50 @@ import backArrow from "../../assets/left-arrow.png"
 import LoadSpin from '../../components/user/LoadSpinButton';
 import LoadSpinContent from '../../components/user/LoadSpinContent';
 import { contextValue } from '../../contextvaluses/ContextValue';
+import close from '../../assets/close (1).png'
 
 const MovieDetails = () => {
   const { id } = useParams();
   const navi = useNavigate()
-  console.log(id);
+  // console.log(id);
+  const {contextState,contextCity} = useContext(contextValue)
+
   const [movie, setMovie] = useState(null);
   const [mCast, setMCast] = useState(null);
+
   const [msg,setMsg] = useState('')
-  const [display,setDisplay] = useState(false)
   const [load,setLoad] = useState(false)
-  const {contextState,contextCity} = useContext(contextValue)
+
+  const [display,setDisplay] = useState(false)
 
   async function getMovie() {
     try {
       setLoad(true)
       setDisplay(false)
-      console.log("Entering")
+      // console.log("Entering")
       const response = await MovieInstance.get(`/tmdb/${id}`);
-      setMovie(response?.data?.Movie);
-      setMCast(response?.data?.cast);
+      setMovie(response?.data?.Movie || null);
+      setMCast(response?.data?.cast || null);
       console.log("Finised")
     } catch (err) {
       setDisplay(true)
-      setMsg(err.response?.data?.message);
+      setMsg(err.response?.data?.message || "Unable to load movie details");
     }
     finally{
       setLoad(false)
     }
   }
   useEffect(() => {
-    console.log("Before API call")
+    if(!id) return
+    // console.log("Before API call")
     getMovie();
   }, [id]);
 
   // }
-  const runtime = movie?.runtime ?? 0;
+  const runtime = movie?.runtime || 0;
   const hours = Math.floor(runtime / 60);
   const mins = runtime % 60;
-  const RunTime = `${hours}h ${mins}m`;
+  const RunTime = runtime>0 ?`${hours}h ${mins}m`:"Runtime unavailable";
 
   const releaseDate = movie?.release_date
     ? new Date(movie?.release_date).toLocaleDateString('en-GB', {
@@ -52,47 +57,70 @@ const MovieDetails = () => {
         month: 'short',
         year: 'numeric',
       })
-    : '';
+    : 'Release date unavailable';
 
-  const trailer = movie?.videos?.results?.find(
-    (video) => video.site === 'YouTube' && video.type === 'Trailer',
-  );
-  console.log(movie);
-  console.log(mCast);
+  // const trailer = movie?.videos?.results?.find(
+  //   (video) => video.site === 'YouTube' && video.type === 'Trailer',
+  // );
+  // console.log(movie);
+  // console.log(mCast);
+
   const mainCast = mCast?.cast?.slice(0, 7) || [];
 
-  console.log(contextCity,contextState);
-  console.log(mainCast);
+  // console.log(contextCity,contextState);
+  // console.log(mainCast);
+
+  // Loading
+if(load){
+  return (
+    <div className='flex min-h-screen items-center justify-center bg-[#070a10]'>
+     <LoadSpinContent/>
+    </div>
+  )
+}
+
+// Error
+if(msg){
+  return (
+    <div className='flex min-h-screen items-center justify-center bg-[#070a10] px-4 text-white'>
+        <div className='w-full max-w-md rounded-2xl border border-red-500/50 bg-[#111722] px-6 py-8 text-center'>
+      <img onClick={()=>navi(-1)} className='w-5 h-5 hover:bg-red-500/50 border hover:cursor-pointer border-white/10' src={close} alt="" />
+         <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-500/10 text-xl font-red-400'>
+         !
+         </div>
+         <h2 className='text-lg font-semibold text-white sm:text-xl'>
+          Movie details unavailable
+         </h2>
+         <p className='mt-2 text-sm leading-6 text-gray-400'>
+            {msg}
+         </p>
+         <button type='button'
+         onClick={getMovie}
+         className='mt-5 rounded-lg bg-red-500 px-5 py-2.5 text-sm font-semibold text-white trasition hover:bg-red-600 active:scale-95'>
+          Try Again
+         </button>
+        </div>
+    </div>
+  )
+}
+
 
   return (
-    <div className='bg-[#0f0f0f] p-2 text-white'>
-      <img onClick={()=>navi(-1)} className='p-1 w-7 fixed z-50 ml-3 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
+    <div className='bg-[#070a10] p-2 text-white'>
+      {/* Page Container */}
+    <div className="p-3 w-full max-w-[1400px] pt-4 px-3 pb-28 sm:px-5 md:px-8 lg:px-10  min-h-screen">
+      <img onClick={()=>navi(-1)} className='p-1 w-7 bg-white/10 fixed z-50 ml-3 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-amber-100 rounded-full' src={backArrow} alt="" />
       
-    <div className="p-3 relative py-3 md:text-xs mt-4 tracking-wider flex flex-col gap-5 md:gap-8 min-h-screen">
-      {
-       load?<LoadSpinContent/>: display?(<p className='text-center fixed top-[50%] left-[40%]'>{msg}<br/>
-       <span onClick={getMovie()} className='bg-gray-500 cursor-pointer text-gray-200 px-2 py-1 rounded-md'>Retry</span>
-       </p>):
-      
-      <div>
+      {/* Movie Details Card */}
+      <section className='    border-white/10 bg-[#111722]'>
       <div className=" rounded-lg space-y-1 lg:grid grid-cols-2 justify-items-center">
         <div className="rounded-2xl w-xs lg:w-sm mx-auto  ">
-          {/* {trailer ? (
-            <iframe
-              className="w-full rounded-2xl aspect-video"
-              src={`https://www.youtube.com/embed/${trailer.key}`}
-              title={`${movie?.title} Trailer`}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-            />
-          ) : ( */}
+         
             <img
               className="rounded-2xl h-78"
               src={`https://image.tmdb.org/t/p/original${movie?.backdrop_path || movie?.poster_path}`}
-              alt="Poster"
-            />
-          {/* )}  */}
+              alt="Movie-Poster" />
+          
         </div>
         <div className="flex items-center lg:flex-col justify-between lg:justify-center text-xs md:text-[16px] mt-2 gap-4">
           <h1 className="justify-self-center hidden lg:flex lg:text-xl justify-center items-center md:text-xl lg:font-extrabold font-semibold text-[16px]">
@@ -138,10 +166,12 @@ const MovieDetails = () => {
         </div>
           <h1 className="justify-self-center lg:hidden lg:text-2xl md:text-xl lg:font-extrabold font-semibold text-[16px]">
             {movie?.original_title}
-            <span className="text-sm font-normal">
+            {movie?.original_title && movie?.original_title !== movie?.title && (
+            <span className="text-sm text-gray-400 font-normal">
               {' '}
               ({movie?.title})
             </span>
+            )}
           </h1>
         <p className="lg:hidden md:text-[16px]">
           tagline: {movie?.tagline || ''}
@@ -170,7 +200,7 @@ const MovieDetails = () => {
                   : '/default-avatar.png'
               }
               className="border w-18 h-18 md:w-25 md:h-25 object-cover rounded-full"
-              alt="castPic"
+              alt={cast.name}
             />
             <p className="font-semibold text-sm md:text-[15px]">{cast.name} </p>
             <span className="text-red-500 text-xs md:text-[15px]">
@@ -180,13 +210,13 @@ const MovieDetails = () => {
         ))}
       </div>
       
-      </div>
-}
+      </section>
       <div onClick={()=>navi(`/theaters_shows/${id}/${contextState?._id}/${contextCity?._id}`)} className="fixed flex justify-center bottom-2 md:bottom-4 left-0 right-0 px-3 md:px-8 py-1">
         <button className="border lg:w-60 md:w-80 w-90 md:text-xl hover:cursor-pointer hover:bg-red-700 bg-red-500 border-gray-400 shadow-2xl hover:shadow-olive-500  p-2 rounded-md text-[17px] lg:text-2xl lg:p-3 font-semibold text-white hover:text-gray-200">
           Book Ticket
         </button>
       </div>
+      
     </div>
     </div>
   );
