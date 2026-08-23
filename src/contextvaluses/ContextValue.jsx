@@ -9,7 +9,7 @@ export const contextValue = createContext()
 const ContextProvider = ({ children }) => {
   const [contextEmail, setContextEmail] = useState('')
   const [contextUser, setContextUser] = useState(null)
-  const [contextRole,setContextRole] = useState('')
+  const [contextRole, setContextRole] = useState('')
   const [contextSearchMovie, setContextSearchMovie] = useState('')
   const [contextMovieData, setContextMovieData] = useState(null)
   const [isContextSearch, setIsContextSearch] = useState(false)
@@ -35,59 +35,59 @@ const ContextProvider = ({ children }) => {
 
   }, [])
 
-  useEffect(()=>{
-    async function state(){
-      try{
+  useEffect(() => {
+    async function state() {
+      try {
         const name = 'tamilnadu'
-      const response = await stateInstance.get(`/stateName/${name}`)
-      console.log(response?.data)
-      return setContextState(response?.data?.state)
-      }catch(err){
-        console.log("State Error in Context",err.response?.data?.message)
+        const response = await stateInstance.get(`/stateName/${name}`)
+        console.log(response?.data)
+        return setContextState(response?.data?.state)
+      } catch (err) {
+        console.log("State Error in Context", err.response?.data?.message)
       }
     }
 
-    async function city(){
-      try{
+    async function city() {
+      try {
         const name = 'chennai'
-      const response = await CityInstance.get(`/cityName/${name}`)
-      console.log(response?.data)
-      return setContextCity(response?.data?.city)
-      }catch(err){
-        console.log("City Error in Context ",err.response?.data?.message)
+        const response = await CityInstance.get(`/cityName/${name}`)
+        console.log(response?.data)
+        return setContextCity(response?.data?.city)
+      } catch (err) {
+        console.log("City Error in Context ", err.response?.data?.message)
       }
     }
     state()
     city()
-  },[])
-  
- useEffect(()=>{
+  }, [])
+
+  useEffect(() => {
     console.log(contextState)
     console.log(contextCity)
-    console.log("ContextEmail " ,contextEmail)
- },[contextState,contextCity])
+    console.log("ContextEmail ", contextEmail)
+  }, [contextState, contextCity])
 
 
-// ---------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // Theater Admin's
-  const [contextEmailTA,setContextEmailTA] = useState('')
-  const [contextTA,setContextTA] = useState(null)
+  const [contextEmailTA, setContextEmailTA] = useState('')
+  const [contextTA, setContextTA] = useState(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     async function getTheaterAdmin() {
-      try{
+      try {
         const response = await theaterAdminInstance.get('/mee')
         setContextTA(response?.data?.admin)
         setContextEmailTA(response?.data?.admin.email)
-      }catch(err){
+      } catch (err) {
         console.log(err.response?.data?.message)
       }
     }
     getTheaterAdmin()
-  },[])
-console.log(contextEmailTA)
+  }, [])
+  console.log(contextEmailTA)
   return (
-    <contextValue.Provider value={{contextTA,setContextTA,contextEmailTA,setContextEmailTA, contextCity, setContextCity, contextState, setContextState, contextMovieError, setContextMovieError, contextMovieLoad, setContextMovieLoad, isContextSearch, setIsContextSearch, contextMovieData, setContextMovieData, contextSearchMovie, setContextSearchMovie, contextEmail, setContextEmail, contextUser, setContextUser }}>{children}</contextValue.Provider>
+    <contextValue.Provider value={{ contextTA, setContextTA, contextEmailTA, setContextEmailTA, contextCity, setContextCity, contextState, setContextState, contextMovieError, setContextMovieError, contextMovieLoad, setContextMovieLoad, isContextSearch, setIsContextSearch, contextMovieData, setContextMovieData, contextSearchMovie, setContextSearchMovie, contextEmail, setContextEmail, contextUser, setContextUser }}>{children}</contextValue.Provider>
   )
 }
 

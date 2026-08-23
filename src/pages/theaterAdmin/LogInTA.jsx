@@ -11,7 +11,7 @@ const LogInTA = () => {
   const { contextEmailTA, setContextEmailTA } = useContext(contextValue)
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
-  const [theaterName,setTheaterName] = useState('')
+  const [theaterName, setTheaterName] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [userData, setUserData] = useState('')
@@ -29,7 +29,7 @@ const LogInTA = () => {
       if (password === '') {
         setError("Please Enter Your Password")
       }
-      const response = await authInstance.post('/tadmin/login', { email: email, password: password,theaterName:theaterName})
+      const response = await authInstance.post('/tadmin/login', { email: email, password: password, theaterName: theaterName })
       setUserData(response?.data)
       console.log(response.data)
       setContextEmailTA(response?.data?.existUser?.email)
@@ -49,7 +49,7 @@ const LogInTA = () => {
     }
 
   }
-  console.log(theaterName,email,password)
+  console.log(theaterName, email, password)
 
   return (
     <div className='flex justify-center items-center min-h-screen rounded-2xl bg-[#070a10] text-white '>

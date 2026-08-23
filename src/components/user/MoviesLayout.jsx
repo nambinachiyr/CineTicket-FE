@@ -39,7 +39,7 @@ const MoviesLayout = () => {
         const response = await MovieInstance.get(
             `/${contextState?._id}/${contextCity?._id}/now_playing`,
         );
-        // console.log(response?.data?.movies);
+        console.log(response?.data?.movies.map(m => m.title));
         setMovie(response?.data?.movies || []);
 
     }
@@ -98,39 +98,48 @@ const MoviesLayout = () => {
     // Just Changed
 
     return (
-        <div className="reletive flex w-full flex-col gap-7">
-            <div className="flex justify-end ">
-                <p className=" ">📍 {contextCity?.name},</p>
-                <p
+        <div className="reletive flex w-full flex-col gap-8">
+            <div className="flex justify-end mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-10 ">
+                <button
                     onClick={handleOneState}
-                    className="hover:cursor-pointer hover:scale-95 transition-all"
+                    className="hover:cursor-pointer flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:text-red-600 hover:scale-95 transition-all"
                 >
+                    <span>📍</span>
                     {' '}
-                    {contextState?.name}
-                </p>
+                    <span>
+                        {contextCity?.name}, {contextState?.name}
+                    </span>
+                </button>
             </div>
 
             <div>
-                 {selectLocation && (
-               <div className='fixed inset-0 z-40 w-full bg-black/60 backdrop-blur-[0.2]'>
-                    <div className="fixed top-45  backdrop-blur-lg z-80 right-10 md:right-15">
-                        <Location
-                            stateLocation={stateLocation}
-                            setStateLocation={setStateLocation}
-                            cityLocation={cityLocation}
-                            setCityLocation={setCityLocation}
-                            handleOneState = {handleOneState}
-                            setSelectLocation={setSelectLocation}
-                            selectLocation={selectLocation}
-                        />
+                {selectLocation && (
+                    <div className='fixed inset-0 z-40 w-full bg-black/60 backdrop-blur-[0.2]'>
+                        <div className="fixed top-45  backdrop-blur-lg z-80 right-10 md:right-15">
+                            <Location
+                                stateLocation={stateLocation}
+                                setStateLocation={setStateLocation}
+                                cityLocation={cityLocation}
+                                setCityLocation={setCityLocation}
+                                handleOneState={handleOneState}
+                                setSelectLocation={setSelectLocation}
+                                selectLocation={selectLocation}
+                            />
+                        </div>
                     </div>
-               </div>
                 )}
 
                 {/* Loading */}
                 {
                     loading && (
-                        <div className='flex min-h-[45vh] items-center backdrop-blur-lg  justify-center'><LoadSpinContent /></div>
+                        <div className='flex flex-wrap gap-5 min-h-[45vh] py-5 items-center backdrop-blur-sm bg-gray-500/1 '>
+                            {
+                                [1, 2, 3, 4, 5].map(s => (
+                                    <div className='w-38 h-59 border rounded-xl border-gray-300'></div>
+                                ))
+                            }
+                            <p className='fixed left-[40%]'><LoadSpinContent /></p>
+                        </div>
                     )
                 }
 
@@ -150,66 +159,70 @@ const MoviesLayout = () => {
 
                 {
                     !loading && !movieError && (
-                        <>
-                            <div className="flex flex-col gap-3">
-                                <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
-                                    Now <span className="text-red-500">Playing</span>
-                                </h1>
-                                <div className="flex gap-5 overflow-x-auto">
-                                    {/* Now Playing */}
+                        <div className='mx-auto w-full max-w-[1400px] px-4 sm:px-3 lg:px-10'>
+                            < div className='flex flex-col gap-10'>
+                                <div className="flex flex-col gap-5">
+                                    <h1 className="text-xl font-semibold px-2 text-[#111827]  tracking-wide">
+                                        Now <span className="text-red-500">Playing</span>
+                                    </h1>
+                                    <div className={`pb-4 flex overflow-x-auto gap-5 md:gap-10`}>
+                                        {/* Now Playing */}
 
-                                    {movie && movie?.length > 0 ? (
-                                        movie?.map(
-                                            (movieData) => (<MovieCards movieData={movieData} />
+                                        {movie && movie?.length > 0 ? (
+                                            movie?.map(
+                                                (movieData) => (<MovieCards key={movieData._id} movieData={movieData} />
 
-                                            ))) : (
-                                        ''
-                                    )}
+                                                ))) : (
+                                            ''
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                            {/* Trending Movies */}
-                            <div className="flex flex-col gap-3 ">
+
+                                {/* Cut just for testing */}
+                                {/* Trending Movies */}
+                                {/* <div className="flex flex-col gap-3 ">
                                 <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
                                     Trending <span className="text-red-500">Movies</span>{' '}
                                 </h1>
                                 <div className="flex gap-5 overflow-x-auto pb-2">
                                     {trendMovies && trendMovies?.length > 0 ? (
                                         trendMovies?.map(
-                                            (movieData) => (<MovieCards movieData={movieData} />
-
+                                            (movieData) => (<MovieCards key={movieData._id} movieData={movieData} />
+                                                
                                             ),
                                         )
                                     ) : (
                                         ''
                                     )}
                                 </div>
-                            </div>
+                            </div> */}
 
-                            {/* Popularity Movies */}
+                                {/* Popularity Movies */}
 
-                            <div className="flex flex-col gap-3 ">
-                                <h1 className="text-xl px-2 text-white font-semibold tracking-wider">
-                                    Popularity <span className="text-red-500">Movies</span>{' '}
-                                </h1>
-                                <div className="flex gap-5 overflow-x-auto pb-4">
-                                    {popularity && popularity?.length > 0 ? (
-                                        popularity?.map(
-                                            (movieData) => (<MovieCards movieData={movieData} />
+                                <div className="flex flex-col gap-3">
+                                    <h1 className="text-xl px-2 text-[#111827] font-semibold tracking-wide">
+                                        Recommended <span className="text-red-500">Movies</span>{' '}
+                                    </h1>
+                                    <div className="flex gap-5 gap-10 overflow-x-auto pb-4">
+                                        {popularity && popularity?.length > 0 ? (
+                                            popularity?.map(
+                                                (movieData) => (<MovieCards key={movieData._id} movieData={movieData} />
 
-                                            ),
-                                        )
-                                    ) : (
-                                        ''
-                                    )}
+                                                ),
+                                            )
+                                        ) : (
+                                            ''
+                                        )}
+                                    </div>
                                 </div>
+
                             </div>
 
-
-                        </>)}
+                        </div>)}
             </div>
         </div>
-    
-        
+
+
     );
 };
 

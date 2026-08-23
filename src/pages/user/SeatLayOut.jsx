@@ -80,13 +80,13 @@ const SeatLayOut = () => {
       console.log("CREATE ORDER RES : ", response?.data)
       const order = response?.data?.order;
       console.log(order, "ORDER");
-      return openRazorPay(order, showid, seats, navi,  setIsprocess);
+      return openRazorPay(order, showid, seats, navi, setIsprocess);
     } catch (err) {
       console.log(err.response);
       // setLoad(false)
       setIsprocess(false)
     }
-    
+
   }
 
   console.log(show)
@@ -112,7 +112,7 @@ const SeatLayOut = () => {
   // SeatLayOut Design
   return (
     <>
-      <div className="bg-[#070a10] min-h-screen  px-3 py-4 text-white relative">
+      <div className="bg-[#F8FAFC] min-h-screen  px-3 py-4 text-gray-800 relative">
         <img onClick={() => navi(-1)} className='px-2 py-1 fixed lg:w-10 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-[#070a10] border-white/10 rounded-full' src={backArrow} alt="" />
 
         {isprocess && (
@@ -122,7 +122,7 @@ const SeatLayOut = () => {
         )}
         {
           showPopUp && <div className='absolute inset-0 border flex justify-center items-center backdrop-blur-md'>
-            <div className='w-2xs md:w-2xl p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center rounded-2xl items-center border border-white/10 bg-[#111722] sm:p-6 shadow-2xl'>
+            <div className='w-2xs text-white md:w-2xl p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center rounded-2xl items-center border border-white/10 bg-[#111722] sm:p-6 shadow-2xl'>
               <h1 className='text-xl md:text-2xl'>Confirm Booking</h1>
               <div className='flex md:text-xl flex-col flex-wrap gap-2 md:gap-4'>
                 <p className='flex flex-wrap'>Seats : [{selectedSeats.map((s, index) => <span key={s.seatNumber} className='flex flex-row'>{s.seatNumber}{selectedSeats.length - 1 === index ? "" : ','}</span>)}]</p>
@@ -138,7 +138,7 @@ const SeatLayOut = () => {
 
         <div className="flex flex-col gap-12 lg:gap-3 min-h-screen justify-center items-center">
           <h1 className=" text-xl text-red-500">
-            Price - <span className='text-white'>₹{show?.price}</span>
+            Price - <span className='text-gray-800'>₹{show?.price}</span>
           </h1>
           <div className="flex ">
             <p className=" border bg-gray-400 text-white border-gray-100 justify-center items-center mb-2 lg:mb-6 flex flex-col gap-5 rounded-2xl">
@@ -201,7 +201,7 @@ const SeatLayOut = () => {
                       </span>{' '}
                     </p>
                   ))}
-                  
+
                   ]
                 </div>
                 <p className="font-light text-[12px]">

@@ -103,16 +103,16 @@ const routes = [
         hydrateFallbackElement: <LoadSpinContent />
       },
       {
-        path:"runningmovies",
-        element:<RunningMovies/>
+        path: "runningmovies",
+        element: <RunningMovies />
       },
       {
         path: "addscreen",
         element: <AddNewScreen />
       },
       {
-        path:'addshow',
-        element:<AddNewShow/>
+        path: 'addshow',
+        element: <AddNewShow />
       }
     ]
   }
@@ -121,7 +121,7 @@ const router = createBrowserRouter(routes)
 
 
 const App = () => {
-  const {   contextUser, setContextUser } = useContext(contextValue)
+  const { contextUser, setContextUser } = useContext(contextValue)
 
   return (<>
     <RouterProvider router={router}></RouterProvider>

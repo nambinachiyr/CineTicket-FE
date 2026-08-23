@@ -6,7 +6,7 @@ import backArrow from "../../assets/left-arrow.png"
 const TheaterInMovie = () => {
   const data = useLoaderData()
   const navi = useNavigate()
-  const [theaterSearch,setTheaterSearch] = useState('')
+  const [theaterSearch, setTheaterSearch] = useState('')
 
   console.log(data)
 
@@ -100,24 +100,37 @@ const TheaterInMovie = () => {
   const show = validShows[0];
   console.log(show)
 
-  const filteredTheaterShows = showsByDates.filter((show)=>
+  const filteredTheaterShows = showsByDates.filter((show) =>
     show.theater.name.toLowerCase().includes(theaterSearch.toLowerCase().trim()
-)
+    )
   )
 
+  const groupedShowByTheater = filteredTheaterShows.reduce((acc, show) => {
+    const theaterId = show.theater._id
+    if (!acc[theaterId]) {
+      acc[theaterId] = {
+        theater: show.theater,
+        shows: []
+      }
+    }
+
+    acc[theaterId].shows.push(show)
+    return acc
+  }, {})
+  console.log(groupedShowByTheater)
 
   return (
     <div className='bg-[#070a10] text-white px-3 sm:px-5 md:px-8 py-4 min-h-screen'>
       <img onClick={() => navi(-1)} className='p-2 w-10 bg-[#464656] hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-red-500/50 active:scale-95 rounded-full' src={backArrow} alt="" />
-     <div className='flex max-w-4xl mx-auto justify-center my-5'>
-       <input
-  type="text"
-  value={theaterSearch}
-  onChange={(e) => setTheaterSearch(e.target.value)}
-  placeholder="Search theater name..."
-  className="
+      <div className='flex max-w-4xl mx-auto justify-center my-5'>
+        <input
+          type="text"
+          value={theaterSearch}
+          onChange={(e) => setTheaterSearch(e.target.value)}
+          placeholder="Search theater name..."
+          className="
   w-full  
-    bg-[#111722]
+    bg-gray-500/40
     border border-white/10
     text-white text-sm
     placeholder:text-gray-500
@@ -127,42 +140,30 @@ const TheaterInMovie = () => {
     focus:border-red-500/50
     sm:text-base
   "
-/>
+        />
 
 
-     </div>
+      </div>
       {
         validShows.length === 0 ? <p className='flex min-h-screen justify-center items-center text-xl text-gray-700'>No upcoming shows are available for this movie ...</p>
 
           :
-          <div className='mt-7 mx-auto lg:grid lg:grid-cols-2  gap-7'>
-         <div className='flex flex-col items-center gap-5'>
-            {
-              show?.bookingStatus === "Open" && show?.showStatus !== "Completed" ? (
-                <div key={show._id} className='flex lg:flex-col gap-7 items-center text-lg  font-semibold'>
-                  <img className='w-30 md:w-50 object-cover md:h-50 lg:h-55 rounded-lg' src={`https://image.tmdb.org/t/p/original${show?.movie?.poster_path}`} alt= {show.movie.title || "Movie Poster"} />
-                  <h1 className='text-wrap max-w-xs text-center text-base font-semibold sm:text-lg lg:text-xl'>{show.movie.title}</h1>
-                  <div className='lg:flex flex-wrap justify-center gap-2 lg:max-w-[280px] hidden text-sm px-20'>
-                   
-                    {
-
-                      removeDuplicates?.map((d, index) => (
-                        <p key={d} onClick={() => handleTheaters(d)}
-                          className={`w-12 md:px-7 px-5 text-sm md:text-base hover:cursor-pointer  ${d === selectDate ? 'bg-red-600 text-white flex border-red-600' : 'bg-[#1c1c1c] border-gray-700 text-gray-300 hover:border-red-500 hover:text-white transition-all duration-300  scale-90 cursor-pointer'}`}>{d}</p>
-                      ))
-
-                    }
-                    {/* <p>Check the Dates</p> */}
+          <div className='mt-7 mx-auto  gap-7'>
+            <div className='flex flex-col items-center gap-5'>
+              {
+                show?.bookingStatus === "Open" && show?.showStatus !== "Completed" ? (
+                  <div key={show._id} className='flex lg:flex-col gap-7 items-center text-lg  font-semibold'>
+                    <img className='w-30 md:w-50 object-cover md:h-50 lg:h-55 rounded-lg' src={`https://image.tmdb.org/t/p/original${show?.movie?.poster_path}`} alt={show.movie.title || "Movie Poster"} />
+                    <h1 className='text-wrap max-w-xs text-center text-base font-semibold sm:text-lg lg:text-xl'>{show.movie.title}</h1>
                   </div>
-                </div>
 
-              ) : <p>Booking Closed</p>
+                ) : <p>Booking Closed</p>
 
 
-            }
+              }
             </div>
-            {/* LG:Hidden */}
-            <div className='flex flex-wrap my-8 sm:my-15 items-center justify-center gap-2 lg:hidden md:text-xl px-20'>
+
+            <div className='flex flex-wrap my-8 sm:my-15 items-center justify-center gap-2 md:text-xl px-20'>
 
               {
                 removeDuplicates?.map((d, index) => (
@@ -173,33 +174,34 @@ const TheaterInMovie = () => {
               {/* <p>Check the Dates</p> */}
             </div>
 
-            {/* Theater Search - Add Here */}
-           
+
+
             {/* DIsplay the Theater Based on the SelectedDate Default - today */}
-            <div className='flex justify-center lg:mt-15  flex-col gap-2 items-center lg:w-full lg:h-35'>
+            <div className='grid grid-cols-1 mx-auto lg:grid-cols-2 justify-items-center lg:mt-15  flex-col gap-2 lg:w-full lg:h-35'>
               {
-                filteredTheaterShows.length>0?filteredTheaterShows?.map((show, index) => (
-                  <div key={show._id} className='border gap-3 bg-[#1c1c1c] flex flex-col justify-center border-gray-800 rounded-xl flex-wrap w-[90%] md:w-[85%] p-4 md:px-6 hover:border-red-500 transition-all'>
-                    <p className='flex text-[16px] font-medium text-neutral-100  md:text-lg items-center gap-2 tracking-wide'>{show.theater.name},
+                groupedShowByTheater ? Object.values(groupedShowByTheater)?.map((group) => (
+                  <div key={group._id} className='border gap-3 bg-[#1c1c1c] flex flex-col justify-center border-gray-800 rounded-xl flex-wrap w-[90%] md:w-[85%] p-2 md:px-6 hover:border-red-500 transition-all'>
+                    <p className='flex text-[16px] font-medium text-neutral-100  md:text-lg items-center gap-2 tracking-wide'>{group.theater.name},
                       <span className='flex items-center gap-1 text-gray-400 text-sm'>
-                        <img src={placeholder} alt="" className='w-3 h-3 md:w-5 md:h-5' />{(show.theater.address).split(',').at(-1)}</span>
-                        </p>
+                        <img src={placeholder} alt="" className='w-3 h-3 md:w-5 md:h-5' />{(group.theater.address).split(',').at(-1)}</span>
+                    </p>
                     <div className=''>
                       {/* Time Section */}
-                      {
-                        show.showStatus !== "Completed" ?
-                          <Link to={`/${show._id}/${show.showDate}/${show.showTime}`} key={index}
-                            className='hover:cursor-pointer tracking-normal border border-x-4 text-sm md:border-x-8 justify-center border-green-600 bg-gray-100 transition-all text-gray-900 duration-300 hover:translate rounded-3xl hover:border-gray-50 hover:scale-105 shadow-2xl hover:bg-green-600 hover:text-white w-19 md:w-28 text-center whitespace-nowrap px-1 py-1 flex flex-wrap gap-3'>{show.showTime}</Link>
-                          : (
-                            <span className='text-sm border border-gray-700 text-gray-500 px-3 py-1 rounded-3xl'>
-                              {show.showTime} - Closed
-                            </span>
-                          )
-                      }
+                      <div className='flex flex-wrap gap-3'>
+                        {
+                          group.shows.map(show => (
+                            show.showStatus !== "Completed" &&
+                            <Link key={show._id} to={`/${show._id}/${show.showDate}/${show.showTime}`}
+                              className='border-l-4 border-r-4 hover:border-gray-100 px-3 py-1 hover:bg-green-600 hover:text-white transition-all border-green-600  bg-gray-100 text-gray-900 text-sm rounded-3xl '>
+                              {show.showTime}
+                            </Link>
+                          ))
+                        }
+                      </div>
                       {/* feature implement status show like changing color and more*/}
                     </div>
                   </div>
-                )):<p className='text-center text-white py-5 border border-gray-500 w-full md:w-fit p-4'>No Search theater is available "{theaterSearch}"</p>
+                )) : <p className='text-center text-white py-5 border border-gray-500 w-full md:w-fit p-4'>No Search theater is available "{theaterSearch}"</p>
               }
             </div>
 

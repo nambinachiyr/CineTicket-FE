@@ -8,7 +8,7 @@ import { contextValue } from '../../contextvaluses/ContextValue'
 const Login = () => {
   const Navi = useNavigate()
   const location = useLocation()
-  const { contextEmail, setContextEmail,setContextUser,contextUser } = useContext(contextValue)
+  const { contextEmail, setContextEmail, setContextUser, contextUser } = useContext(contextValue)
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,14 +28,14 @@ const Login = () => {
       }
       if (!password) {
         setLoading(false)
-       return setError("Please Enter Your Password")
+        return setError("Please Enter Your Password")
       }
       const response = await authInstance.post('/login', { email: email, password: password })
       setUserData(response?.data)
       // console.log(response.data)
       setContextUser(response?.data?.existUser)
       setContextEmail(response?.data?.existUser?.email)
-      
+
       toast.success(response?.data?.message)
       setEmail('')
       setPassword('')
