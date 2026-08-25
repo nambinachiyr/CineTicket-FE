@@ -118,11 +118,12 @@ const SeatLayOut = () => {
   // SeatLayOut Design
   return (
     <>
-    <div className='min-h-screen flex justify-center items-center bg-[#F8FAFC]'>
-      {
-        loading&& <LoadSpinContent/>
-      }
+    {
+      loading &&
+      <div className='min-h-screen flex justify-center items-center bg-[#F8FAFC]'>
+       <LoadSpinContent/>
     </div>
+    }
       <div className="bg-[#F8FAFC] min-h-screen  px-3 py-4 text-gray-800 relative">
         <img onClick={() => navi(-1)} className='px-2 py-1 fixed lg:w-10 hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-[#070a10] border-white/10 rounded-full' src={backArrow} alt="" />
 
