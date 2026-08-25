@@ -150,17 +150,11 @@ const TheaterInMovie = () => {
           :
           <div className='mt-7 mx-auto  gap-7'>
             <div className='flex flex-col items-center gap-5'>
-              {
-                show?.bookingStatus === "Open" && show?.showStatus !== "Completed" ? (
+             
                   <div key={show._id} className='flex lg:flex-col gap-7 items-center text-lg  font-semibold'>
                     <img className='w-30 md:w-50 object-cover md:h-50 lg:h-55 rounded-lg' src={`https://image.tmdb.org/t/p/original${show?.movie?.poster_path}`} alt={show.movie.title || "Movie Poster"} />
                     <h1 className='text-wrap max-w-xs text-center text-base font-semibold sm:text-lg lg:text-xl'>{show.movie.title}</h1>
-                  </div>
-
-                ) : <p>Booking Closed</p>
-
-
-              }
+                  </div>      
             </div>
 
             <div className='flex flex-wrap my-8 sm:my-15 items-center justify-center gap-2 md:text-xl px-20'>
@@ -189,12 +183,13 @@ const TheaterInMovie = () => {
                       {/* Time Section */}
                       <div className='flex flex-wrap gap-3'>
                         {
-                          group.shows.map(show => (
-                            show.showStatus !== "Completed" &&
+                          group.shows.map(show => ( show.bookingStatus==='Open' &&
+                            show.showStatus !== "Completed" ?
                             <Link key={show._id} to={`/${show._id}/${show.showDate}/${show.showTime}`}
                               className='border-l-4 border-r-4 hover:border-gray-100 px-3 py-1 hover:bg-green-600 hover:text-white transition-all border-green-600  bg-gray-100 text-gray-900 text-sm rounded-3xl '>
                               {show.showTime}
-                            </Link>
+                            </Link>:
+                            <p className='border-l-4 border-r-4 hover:border-gray-100 px-3 py-1 hover:bg-gray-600 hover:text-white transition-all border-gray-600  bg-gray-100 text-gray-900 text-sm rounded-3xl hover:cursor-not-allowed'>{show.showTime}</p>
                           ))
                         }
                       </div>
