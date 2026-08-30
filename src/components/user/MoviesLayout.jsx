@@ -18,7 +18,7 @@ const MoviesLayout = () => {
     const { contextState, setContextState, contextCity, setContextCity } =
         useContext(contextValue);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [movieError, setMovieError] = useState('');
 
     // Popular Movies Fetching
@@ -98,7 +98,7 @@ const MoviesLayout = () => {
     // Just Changed
 
     return (
-        <div className="reletive flex w-full flex-col gap-8">
+        <div className="relative flex w-full flex-col gap-3">
             <div className="flex justify-end mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-10 ">
                 <button
                     onClick={handleOneState}
@@ -159,7 +159,7 @@ const MoviesLayout = () => {
 
                 {
                     !loading && !movieError && (
-                        <div className='mx-auto w-full max-w-[1400px] px-4 sm:px-3 lg:px-10'>
+                        <div className='mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-10 pb-10'>
                             < div className='flex flex-col gap-10'>
                                 <div className="flex flex-col gap-5">
                                     <h1 className="text-xl font-semibold px-2 text-[#111827]  tracking-wide">
@@ -203,7 +203,7 @@ const MoviesLayout = () => {
                                     <h1 className="text-xl px-2 text-[#111827] font-semibold tracking-wide">
                                         Recommended <span className="text-red-500">Movies</span>{' '}
                                     </h1>
-                                    <div className="flex gap-5 gap-10 overflow-x-auto pb-4">
+                                    <div className="flex gap-10 overflow-x-auto pb-4">
                                         {popularity && popularity?.length > 0 ? (
                                             popularity?.map(
                                                 (movieData) => (<MovieCards key={movieData._id} movieData={movieData} />

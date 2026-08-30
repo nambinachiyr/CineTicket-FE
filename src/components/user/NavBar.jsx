@@ -62,8 +62,8 @@ const NavBar = () => {
         <>
             {openSideBar && <RightSideBar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />}
             {/* <div className="bg-[#0f0f0f] border-b border-gray-800 px-4 py-4 md:px-8 md:py-5"> */}
-            <header className="sticky top-0 z-40 w-full borer-b border-gray-200 bg-[#111827] backdrop-blur-xl">
-                <div className="max-w-[1400px] justify-between items-center mx-auto px-3 gap-3 py-3 sm:px-5 sm:py-4 md:px-8 md:gap-4 lg:px-10">
+            <header className="sticky top-0 z-40 w-full border-b border-gray-200 bg-[#111827] backdrop-blur-xl">
+                <div className="max-w-[1400px] flex justify-between lg:items-center mx-auto px-4 gap-3 py-3 sm:px-6 sm:py-4 lg:flex-row md:px-8 md:gap-4 lg:px-10">
                     <div className="flex flex-wrap items-center gap-3 lg:flex-nowrap">
                         <div className="flex w-full items-center justify-between gap-3">
                             <h1 type='button' onClick={() => navi('/')} className="flex min-w-0 items-center gap-2 sm:gap-3">
