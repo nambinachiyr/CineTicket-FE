@@ -120,7 +120,7 @@ const TheaterInMovie = () => {
   console.log(groupedShowByTheater)
 
   return (
-    <div className='bg-[#070a10] text-white px-3 sm:px-5 md:px-8 py-4 min-h-screen'>
+    <div className='bg-[#F8FAFC] text-[#111827] px-3 sm:px-5 md:px-8 py-4 min-h-screen'>
       <img onClick={() => navi(-1)} className='p-2 w-10 bg-[#464656] hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-red-500/50 active:scale-95 rounded-full' src={backArrow} alt="" />
       <div className='flex max-w-4xl mx-auto justify-center my-5'>
         <input

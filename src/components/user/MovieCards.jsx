@@ -6,7 +6,7 @@ const MovieCards = ({ movieData }) => {
   return (
     <Link to={`movie/${movieData._id}`}
       className='group block shrink-0 max-w-[300px] w-[135px] sm:w-[165px]
-    md:w-[1905px] lg:w-[205px] xl:w-[215px] focus:outline-none'>
+    md:w-[190px] lg:w-[205px] xl:w-[215px] focus:outline-none'>
 
       <article className='overflow-hidden rounded-xl 
         shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition-all duration-300
