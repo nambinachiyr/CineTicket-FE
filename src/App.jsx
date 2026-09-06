@@ -26,6 +26,7 @@ import theaterLoader from "./loaders/theaterAdmin/Theaterget"
 import AddNewScreen from "./pages/theaterAdmin/AddNewScreen"
 import AddNewShow from "./pages/theaterAdmin/AddNewShow"
 import RunningMovies from "./pages/theaterAdmin/RunningMovies"
+import seatLoader from "./loaders/user/seat"
 
 const routes = [
   {
@@ -56,7 +57,9 @@ const routes = [
       },
       {
         path: ":showid/:showDate/:showTime",
-        element: <SeatLayOut />
+        element: <SeatLayOut />,
+        loader:seatLoader,
+        hydrateFallbackElement:<LoadSpinContent/>
       },
       {
         path: 'booking-success/:id',

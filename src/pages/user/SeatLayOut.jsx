@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import showInstance from '../../axioInstances/user/showInstance';
 import { contextValue } from '../../contextvaluses/ContextValue';
 import LoadSpin from '../../components/user/LoadSpinButton';
@@ -7,40 +7,23 @@ import LoadSpinContent from '../../components/user/LoadSpinContent';
 import paymentInstance from '../../axioInstances/user/paymentInstance';
 import openRazorPay from '../../utils/razorPay/RazorOrder';
 import backArrow from "../../assets/left-arrow.png"
+import close from "../../assets/close (1).png"
 
 const SeatLayOut = () => {
+  const show = useLoaderData()
   const navi = useNavigate();
   const { showid, showDate, showTime } = useParams();
   const { contextEmail } = useContext(contextValue);
   const [load, setLoad] = useState(false);
   const [isprocess, setIsprocess] = useState(false)
-  const [loading,setLoading] = useState(false)
-  const [show, setShow] = useState(null);
+  // const [loading,setLoading] = useState(false)
+  // const [show, setShow] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [error, setError] = useState('');
   const [showPopUp, setShowPopUp] = useState(false)
 
   console.log(contextEmail, 'Email');
-
-  useEffect(() => {
-    async function getShow() {
-      try {
-        setLoad(true);
-        setLoading(true)
-        const response = await showInstance.get(`/${showid}`);
-        // console.log(response?.data)
-        setShow(response?.data?.show);
-       
-      } catch (err) {
-        console.log(err.message);
-        return [];
-      }finally{
-        setLoading(false)
-        setLoad(false)
-      }
-    }
-    getShow();
-  }, [showid]);
+  console.log(show,"Loader")
 
   const row = [...new Set(show?.seats?.map((s) => s.row))];
 
@@ -101,9 +84,10 @@ const SeatLayOut = () => {
       navi('/login', { state: { from: `/${showid}/${showDate}/${showTime}` } });
     }
     return (
-      <div className="flex flex-col justify-center tracking-wider items-center bg-[#0f0f0f] min-h-screen">
-        <button className='border rounded-2xl p-1 bg-gray-300 self-start hover:cursor-pointer' onClick={()=>navi(-1)}>back</button>
-        <p>{error}</p>
+      <div className='bg-[#fefbfe]'>
+        <button className='border rounded-2xl   p-1.5 flex justify-center items-center  m-4 bg-gray-100 border-black/20 hover:bg-gray-50 hover:cursor-pointer w-8 h-8' onClick={()=>navi(-1)}><img className='invert w-5' src={close}/></button>
+      <div className="flex flex-col justify-center tracking-wider items-center  min-h-screen">
+        <p>Please Login First</p>
         <button
           onClick={handleLogin}
           to={'/login'}
@@ -112,6 +96,7 @@ const SeatLayOut = () => {
           LogIn
         </button>
       </div>
+      </div>
     );
   }
 
@@ -119,7 +104,7 @@ const SeatLayOut = () => {
   return (
     <>
     {
-      loading &&
+      !show &&
       <div className='min-h-screen flex justify-center items-center bg-[#F8FAFC]'>
        <LoadSpinContent/>
     </div>
@@ -133,14 +118,14 @@ const SeatLayOut = () => {
           </div>
         )}
         {
-          showPopUp && <div className='absolute inset-0 border flex justify-center items-center backdrop-blur-md'>
-            <div className='w-2xs text-white md:w-2xl p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center rounded-2xl items-center border border-white/10 bg-[#111722] sm:p-6 shadow-2xl'>
-              <h1 className='text-xl md:text-2xl'>Confirm Booking</h1>
+          showPopUp && <div className='absolute inset-0 flex justify-center items-center backdrop-blur-md'>
+            <div className='w-2xs text-white md:w-2xl tracking-widest p-2 px-3 flex flex-col gap-3 md:gap-6 justify-center rounded-2xl items-center border border-white/10 bg-[#111722]/70 sm:p-6 shadow-2xl'>
+              <h1 className='text-xl md:text-2xl text-green-500 font-semibold tracking-wide'>Confirm Booking</h1>
               <div className='flex md:text-xl flex-col flex-wrap gap-2 md:gap-4'>
-                <p className='flex flex-wrap'>Seats : [{selectedSeats.map((s, index) => <span key={s.seatNumber} className='flex flex-row'>{s.seatNumber}{selectedSeats.length - 1 === index ? "" : ','}</span>)}]</p>
-                <p className='font-semibold'>Total : ₹{show.price * selectedSeats.length}</p>
+                <p className='flex flex-wrap font-normal text-gray-300 gap-1.5'>Seats : <span>[</span> {selectedSeats.map((s, index) => <span key={s.seatNumber} className='flex flex-row'>{s.seatNumber}{selectedSeats.length - 1 === index ? "" : ','}</span>)} <span> ]</span></p>
+                <p className='font-normal tracking-widest'>Total : ₹ {show.price * selectedSeats.length} /-</p>
               </div>
-              <p className='flex gap-8 md:text-lg'>
+              <p className='flex gap-8 md:text-lg font-bold'>
                 <span className='rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/5 hover:cursor-pointer' onClick={() => setShowPopUp(false)}>Cancel</span>
                 <span className='rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-red-600 bg-red-500 hover:cursor-pointer' onClick={handle_proceed}>Proceed</span>
               </p>
@@ -148,11 +133,20 @@ const SeatLayOut = () => {
           </div>
         }
 
-        <div className="flex flex-col gap-12 lg:gap-3 min-h-screen justify-center items-center">
-          <h1 className=" text-xl text-red-500">
-            Price - <span className='text-gray-800'>₹{show?.price}</span>
-          </h1>
-          <div className="flex ">
+        <div className="flex flex-col gap-12 lg:gap-3 justify-center min-h-[93vh] items-center">
+          <div className='flex flex-col gap-1  justify-center items-center tracking-wide'>
+            <h1 className='text-xl font-bold text-red-600'><span className='text-sm text-gray-400'>Movie name- </span>{show?.movie?.title}</h1>
+            <div className='flex font-semibold text-gray-600 gap-1 justify-center md:justify-around flex-col md:flex-row'>
+              <p><span className='text-sm text-gray-400'>Theater name- </span>{show?.theater?.name}</p>
+              <p><span className='text-sm text-gray-400'>Screen- </span>{show?.screen?.name}</p>
+            </div>
+            <div className='flex font-semibold text-gray-600 md:justify-around gap-8 md:flex-row'>
+              <p><span className='text-sm text-gray-400'>Date- </span>{show?.showDate}</p>
+              <p><span className='text-sm text-gray-400'>Time- </span>{show?.showTime}</p>
+            </div>
+            <p className='font-semibold text-gray-600'><span className='text-sm  text-gray-400'>Price-</span> ₹{show?.price}/-</p>
+          </div>
+          <div className="flex justify-center md:justify-around ">
             <p className=" border bg-gray-400 text-white border-gray-100 justify-center items-center mb-2 lg:mb-6 flex flex-col gap-5 rounded-2xl">
               {row.map((r) => (
                 <span

@@ -18,21 +18,21 @@ const MovieDetails = () => {
   const [mCast, setMCast] = useState(null);
 
   const [msg, setMsg] = useState('')
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(true)
 
   const [display, setDisplay] = useState(false)
 
   async function getMovie() {
     try {
       setLoad(true)
-      setDisplay(false)
+      // setDisplay(false)
       // console.log("Entering")
       const response = await MovieInstance.get(`/tmdb/${id}`);
       setMovie(response?.data?.Movie || null);
       setMCast(response?.data?.cast || null);
       console.log("Finised")
     } catch (err) {
-      setDisplay(true)
+      // setDisplay(true)
       setMsg(err.response?.data?.message || "Unable to load movie details");
     }
     finally {
@@ -115,7 +115,7 @@ const MovieDetails = () => {
         <section className='rounded-xl p-4 py-6 bg-[#F8FAFC]'>
           <div style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${movie?.backdrop_path || movie?.poster_path})` }} className="relative overflow-hidden rounded-2xl h-[460px]  md:min-h-[560px] lg:min-h-[500px] bg-cover bg-center">
             <div className='absolute inset-0 bg-black/65'></div>
-            <div className='relative z-10 flex h-full min-h-[430px] flex-col gap-6 p-5 text-white md:min-h-[460px] md:p-8 lg:min-h-[500px] lg:flex-row lg:item-center lg:gap-10 lg:p-10'>
+            <div className='relative z-10 flex h-full min-h-[430px] flex-col gap-6 p-5 text-white md:min-h-[460px] md:p-8 lg:min-h-[500px] lg:flex-row lg:items-center lg:gap-10 lg:p-10'>
               <div className="mx-auto shrink-0 lg:mx-auto ">
 
                 <img
@@ -129,7 +129,7 @@ const MovieDetails = () => {
                   {movie?.original_title}
                   <span className="text-sm lg:text-lg font-normal">
                     {' '}
-                    ({movie?.title})
+                    {(movie?.original_title===movie?.title)?"":<p className='ml-1 text-sm'> ( {movie?.title} ) </p>}
                   </span>
                 </h1>
                 <div className="flex flex-wrap gap-2 lg:text-sm w-full">
