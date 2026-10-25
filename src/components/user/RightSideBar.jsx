@@ -6,6 +6,7 @@ import upArrow from '../../assets/up-arrow.png'
 import setting from "../../assets/settings.png"
 import authInstance from '../../axioInstances/user/authInstances';
 import toast from 'react-hot-toast';
+import downArrow from "../../assets/arrow-down-sign-to-navigate.png"
 import { useNavigate } from 'react-router-dom';
 
 const RightSideBar = ({ setOpenSideBar, openSideBar }) => {
@@ -37,9 +38,9 @@ const RightSideBar = ({ setOpenSideBar, openSideBar }) => {
                     <img onClick={() => setOpenSideBar(false)} className='hover:cursor-pointer bg-white/5 hover:bg-white/10 w-6' src={close} alt="" />
                 </div>
 
-                <div className='text-gray-800 flex flex-col gap-4 tracking-wide'><p>😊Hi, Welcome,🥳</p> <span className='text-red-500 tracking-wider font-semibold text-lg'>👉 {contextUser.name} 😊</span></div>
-                <div className='flex gap-3 items-start mt-8 flex-col '>
-                    <p className='flex gap-4 justify-center items-center'><span>Your Orders</span>{openOrders ? <img onClick={() => setOpenOrders(prev => !prev)} className='text-xl hover:shadow-2xl bg-gray-100 rounded-full w-5 h-5 px-1 py-1 text-center hover:border hover:cursor-pointer  hover:border-white/50' src={upArrow} alt="" /> : <span onClick={() => setOpenOrders(true)} className='text-xl hover:shadow-2xl hover:bg-gray-100 rounded-full w-5 h-5 bg-gray-500 mt-1 text-center hover:border hover:text-black hover:cursor-pointer  hover:border-white/60'>⏷</span>}
+                <div className='text-gray-800 flex flex-col gap-4 tracking-wide'><p className='text-sm font-bold'>Welcome,</p> <span className='text-red-500 tracking-wider font-semibold text-lg'> {contextUser.name} </span></div>
+                <div className='flex gap-3 items-start  flex-col '>
+                    <p className='flex gap-3  justify-center items-center'><span className='text-sm font-semibold'>Your Orders</span>{openOrders ? <img onClick={() => setOpenOrders(prev => !prev)} className='text-xl hover:shadow-2xl bg-red-500 rounded-full w-5 h-5 px-1 py-1 text-center hover:border hover:cursor-pointer  hover:border-white/5' src={upArrow} alt="" /> : <img className='text-xl shadow-olive-50 shadow-xl  bg-red-500 rounded-full w-5 h-5 px-1 py-1 text-center hover:border hover:cursor-pointer  hover:border-white/50' src={downArrow} onClick={()=>setOpenOrders(prev=>!prev)}/>}
                     </p>
 
                     {

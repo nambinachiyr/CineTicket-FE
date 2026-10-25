@@ -4,6 +4,7 @@ import leftArrow from "../../assets/left-arrow.png"
 import bookingInstance from '../../axioInstances/user/bookingInstance'
 import toast from 'react-hot-toast'
 import LoadSpinContent from '../../components/user/LoadSpinContent'
+import NavBar from '../../components/user/NavBar'
 
 const SingleBookingTicket = () => {
     const data = useLoaderData()
@@ -12,7 +13,7 @@ const SingleBookingTicket = () => {
             <div className='min-h-screen flex justify-center items-center'><LoadSpinContent/></div>
         )
     }
-    console.log(data)
+    // console.log(data)
     const navi = useNavigate()
 
     const [cancelling,setCancelling] = useState(false)
@@ -27,7 +28,7 @@ const SingleBookingTicket = () => {
     const date = new Date(data.updatedAt)
     const updatedDate = date.toLocaleDateString("en-IN")
     const time = date.toLocaleTimeString("en-IN")
-    console.log(data?.createdAt)
+    // console.log(data?.createdAt)
 
     const bookDate = new Date(data?.createdAt)
     const CreateDate = bookDate.toLocaleDateString("en-IN")
@@ -40,19 +41,46 @@ const SingleBookingTicket = () => {
         try {
             setCancelling(true)
             const response = await bookingInstance.put(`/cancel/${data?._id}`)
-            console.log(response?.data?.cancelData)
+            // console.log(response?.data?.cancelData)
             toast.success("Booking Cancelled Successfully")
             navi(-1)
         } catch (err) {
-            console.log(err.message)
+            // console.log(err.message)
             toast.error(err?.response?.data?.message)
         }finally{
             setCancelling(false)
         }
     }
 
+    
+let [day,month,year] = data?.show?.showDate.split('-')  
+
+const [t,modifier] = data?.show?.showTime.split(' ')
+
+
+let [hours,min] = t.split(":").map(Number)
+
+if(modifier==="PM" && hours !=12){
+    hours +=12
+}
+if(modifier === "AM" && hours === 12){
+    hours = 0
+}
+
+const showDateAndTime = new Date(
+    year,
+    month-1,
+    day,
+    hours,
+    min
+)
+const now = new Date()
+//  console.log(showDateAndTime<now)
+
+
     return (
         <div>
+            <NavBar/>
             <div className='bg-[#F1Fefb] text-gray-700 lg:px-20 min-h-screen m-1 flex flex-col object-contain gap-3 p-4 md:text-xl lg:text-2xl'>
                 <img onClick={() => navi(-1)} className='w-8 h-8 p-2  hover:cursor-pointer transition-all duration-300 hover:scale-75 hover:bg-red-500 rounded-full' src={leftArrow} alt="" />
                  <p className='text-end text-[16px]'>
@@ -95,7 +123,7 @@ const SingleBookingTicket = () => {
                 </div>
 
                 {
-                  data?.bookingStatus !=="Cancelled" ?
+                  showDateAndTime > now && data?.bookingStatus !=="Cancelled" ?
                   <div className='flex justify-center mt-3 lg:mt-0 md:justify-evenly items-center'>
                     <p></p>
                  <button disabled={cancelling} onClick={handleCancelled} className='border py-2 bg-red-500 px-15 hover:cursor-pointer hover:bg-red-700 active:bg-red-50  text-white border-white/10 rounded-2xl text-lg '>{cancelling?"Cancelling . . . ":"Cancel Booking"}</button>
@@ -117,3 +145,5 @@ const SingleBookingTicket = () => {
 }
 
 export default SingleBookingTicket
+
+// WE will develop BE for creating extra shows without change previous shows

@@ -17,6 +17,8 @@ const ContextProvider = ({ children }) => {
   const [contextMovieError, setContextMovieError] = useState('')
   const [contextState, setContextState] = useState(null)
   const [contextCity, setContextCity] = useState(null)
+  const [contextHome,setContextHome] = useState(false)
+  const [contextBooking,setContextBooking] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -87,7 +89,7 @@ const ContextProvider = ({ children }) => {
   }, [])
   console.log(contextEmailTA)
   return (
-    <contextValue.Provider value={{ contextTA, setContextTA, contextEmailTA, setContextEmailTA, contextCity, setContextCity, contextState, setContextState, contextMovieError, setContextMovieError, contextMovieLoad, setContextMovieLoad, isContextSearch, setIsContextSearch, contextMovieData, setContextMovieData, contextSearchMovie, setContextSearchMovie, contextEmail, setContextEmail, contextUser, setContextUser }}>{children}</contextValue.Provider>
+    <contextValue.Provider value={{contextBooking,setContextBooking, contextHome,setContextHome, contextTA, setContextTA, contextEmailTA, setContextEmailTA, contextCity, setContextCity, contextState, setContextState, contextMovieError, setContextMovieError, contextMovieLoad, setContextMovieLoad, isContextSearch, setIsContextSearch, contextMovieData, setContextMovieData, contextSearchMovie, setContextSearchMovie, contextEmail, setContextEmail, contextUser, setContextUser }}>{children}</contextValue.Provider>
   )
 }
 

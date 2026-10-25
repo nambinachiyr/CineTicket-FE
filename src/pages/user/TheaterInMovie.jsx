@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLoaderData, useNavigate } from 'react-router-dom'
 import placeholder from '../../assets/placeholder.png'
 import backArrow from "../../assets/left-arrow.png"
+import NavBar from '../../components/user/NavBar'
+import { contextValue } from '../../contextvaluses/ContextValue'
 
 const TheaterInMovie = () => {
   const data = useLoaderData()
@@ -9,7 +11,10 @@ const TheaterInMovie = () => {
   const [theaterSearch, setTheaterSearch] = useState('')
 
   // console.log(data)
-
+  const {setContextHome} = useContext(contextValue)
+  useEffect(()=>{
+    setContextHome(false)
+  },[])
   function getDate(date) {
     const reverseDate = new Date(date.split('-').reverse().join('-'))
     const monFirst = reverseDate.toLocaleDateString("en-US", {
@@ -109,6 +114,7 @@ const TheaterInMovie = () => {
   }
   )
 
+  // console.log(removeDuplicates[removeDuplicates.length-1])
   const groupedShowByTheater = filteredTheaterShows.reduce((acc, show) => {
     const theaterId = show.theater._id
     if (!acc[theaterId]) {
@@ -121,19 +127,26 @@ const TheaterInMovie = () => {
     acc[theaterId].shows.push(show)
     return acc
   }, {})
-  // console.log(groupedShowByTheater)
+  // const  = removeDuplicates[removeDuplicates.length-1].split(' ')
+  const [day,month,year] =validShows[validShows.length-1].showDate.split('-').map(Number)
+  let newDates = []
+  for (let i = 1;i<5;i++){
+    let d = new Date(year,month-1,day+i)
+    console.log(d,"Inside Loop")
+  }
+  console.log(newDates,day,month,year)
 
   return (
     <div className='bg-[#F8FAFC] text-[#111827] px-3 sm:px-5 md:px-8 py-4 min-h-screen'>
-      <img onClick={() => navi(-1)} className='p-1 w-6 hover:cursor-pointer transition-all duration-300 hover:scale-105 hover:bg-gray-500/20 active:scale-95 rounded-full' src={backArrow} alt="" />
+      <NavBar/>
+      <img onClick={() => navi(-1)} className='p-1 w-6 hover:cursor-pointer mt-5 transition-all duration-300 hover:scale-105 hover:bg-red-500 active:scale-95 rounded-full' src={backArrow} alt="" />
       <div className='flex max-w-4xl mx-auto justify-center my-5'>
         <input
           type="text"
           value={theaterSearch}
           onChange={(e) => setTheaterSearch(e.target.value)}
           placeholder="Search theater name..."
-          className="
-  w-full  
+          className="w-full  
     bg-gray-500/40
     border border-white/10
     text-neutral-800 font-semibold tracking-wide text-sm
@@ -166,10 +179,19 @@ const TheaterInMovie = () => {
 
                 {
                   removeDuplicates?.map((d) => (
-                    <p key={d} onClick={() => handleTheaters(d)}
-                      className={`w-12 md:px-7 px-5 text-sm md:text-base  ${d === selectDate ? 'bg-red-600 text-white border-red-600' : 'bg-[#1c1c1c] border-gray-700 text-gray-300 hover:border-red-500 hover:text-white transition-all duration-300  scale-90 cursor-pointer'}`}>{d}</p>
+                    <div key={d} onClick={() => handleTheaters(d)}
+                      className={`w-16 md:w-19  h-20 justify-center items-center rounded-2xl shadow-xl shadow-gray-300 flex flex-col gap-2 px-3 text-[13px] md:text-base ${d === selectDate ? 'bg-red-600 text-white border-red-600' : 'bg-[#1c1c1c] border-gray-700 text-gray-300 hover:border-red-500 hover:text-white transition-all duration-300  scale-90 cursor-pointer'}`}>
+                        <p>{d.split(' ').slice(1,3).join(' ')}</p>
+                        <span>{d.split(' ').slice(3)}</span>
+                      
+                      </div>
                   ))
                 }
+                {/* {
+                  [1,2,3,4,5].map((d)=>(
+                    <div key={d}>{removeDuplicates[removeDuplicates.length-1]+d}</div>
+                  ))
+                } */}
                 {/* <p>Check the Dates</p> */}
               </div>
             </div>

@@ -4,6 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { contextValue } from '../../contextvaluses/ContextValue';
 import LoadSpinContent from './LoadSpinContent';
 import MovieCards from './MovieCards';
+import searchWhite from "../../assets/search (3).png";
+import leftArrow from "../../assets/left-arrow.png";
+import rightArrow from "../../assets/right-arrow.png";
 
 const MoviesLayout = () => {
 
@@ -15,12 +18,44 @@ const MoviesLayout = () => {
 
     const recommentRef = useRef(null)
 
-    const { contextState, contextCity } =
+    const {setContextBooking, setContextHome, contextState, contextCity,setContextMovieError,
+        setContextMovieData,setContextMovieLoad,setContextSearchMovie,
+        setIsContextSearch,
+     } =
         useContext(contextValue);
 
     const [movieLoading, setMovieLoading] = useState(true);
     const [popularLoading, setPopularLoading] = useState(true);
     const [movieError, setMovieError] = useState('');
+
+     const [search, setSearch] = useState('')
+
+    
+    const handleSearchMovie = async () => {
+        const searchValue = search.trim()
+        if (!searchValue) return
+        setIsContextSearch(true)
+        try {
+            setContextMovieError('')
+            setContextMovieData([])
+            setContextMovieLoad(true)
+            console.log(search)
+            const response = await MovieInstance.get(`/search?title=${encodeURIComponent(searchValue)}`)
+            // console.log(response?.data?.movie)
+            setContextMovieData(response?.data?.movie || [])
+            setContextSearchMovie(searchValue)
+        } catch (err) {
+            setContextMovieError(err.response?.data?.message ||
+                "Unable to search movies."
+            )
+        }
+        finally {
+            setContextMovieLoad(false)
+            // setSearch('')
+
+        }
+    }
+
 
     // Popular Movies Fetching
     async function PopularMovies() {
@@ -99,7 +134,8 @@ const MoviesLayout = () => {
     // }
     useEffect(() => {
         if (!contextState?._id || !contextCity?._id) return;
-
+        setContextHome(true)
+        setContextBooking(false)
         moviesFetch(),
         PopularMovies()
     }, [contextState, contextCity]);
@@ -125,7 +161,15 @@ const MoviesLayout = () => {
     // Just Changed
 
     return (
-        <div className="relative flex w-full flex-col gap-3">
+        <div className="relative p-0 flex w-full flex-col gap-3">
+
+            <div className="border border-white/10 w-full gap-2 rounded-xl lg:w-1/2 h-9 md:w-3/4 md:min-h-10 lg:min-h-10 mx-auto px-0.5 py-0.5 bg-white/[0.06] shadow-[0_6px_24px_rgba(0,0,0,0.18)] transition focus-within:border-red-500/50 focus-within:bg-white/[0.08] sm:max-w-xl md:max-w-2xl lg:max-w-3xl flex items-center justify-between">
+                        <img src={searchWhite} className='w-5 object-contain ' alt="" />
+                        <input type="search" placeholder="Search for movie . . ." aria-label="search movies" onKeyDown={(e) => { if (e.key === "Enter") { handleSearchMovie() } }} value={search} onChange={(e) => setSearch(e.target.value)} className="focus:outline-none tracking-normal min-w-0 flex-1 bg-transparent text-sm px-1 py-2  placeholder:text-gray-500 text-neutral-600 sm:px-2 sm:text-[15px] md:py-2 md:text-base lg:text-[17px]" />
+                        <button type="button" disabled={!search.trim()} onClick={handleSearchMovie} className="flex shrink-0 rounded-lg items-center bg-red-500 active:bg-red-700 text-xs font-semibold text-white transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-400 sm:px-5 sm:text-sm md:px-5 md:py-2 hover:bg-red-600 px-4 py-2 hover:cursor-pointer group">
+                            <span className="text-xs active:text-white lg:text-sm">search</span>
+                        </button>
+                    </div>
 
 
            
@@ -174,11 +218,10 @@ const MoviesLayout = () => {
                                             type="button"
                                             onClick={() => scrollRecommended('left')}
                                             className="
-                    flex h-9 w-9 items-center justify-center
-                    rounded-full
+                    flex h-8 w-8 items-center justify-center
+                    rounded-full my-auto
                     border border-gray-300
                     bg-white
-                    text-4xl
                     text-gray-700
                     shadow-sm
                     transition-all
@@ -190,7 +233,7 @@ const MoviesLayout = () => {
                     hover:cursor-pointer
                 "
                                         >
-                                            ‹
+                                            <span className='flex items-center w-4 justify-center'><img src={leftArrow} alt="" /></span>
                                         </button>
 
                                         {/* Right */}
@@ -198,7 +241,7 @@ const MoviesLayout = () => {
                                             type="button"
                                             onClick={() => scrollRecommended('right')}
                                             className="
-                    flex h-9 w-9 items-center justify-center
+                    flex h-8 w-8 my-auto items-center justify-center
                     text-center
                     rounded-full
                     border border-gray-300
@@ -214,7 +257,7 @@ const MoviesLayout = () => {
                     hover:cursor-pointer
                 "
                                         >
-                                            ›
+                                            <span className='flex items-center w-4 justify-center'><img src={rightArrow} alt="" /></span>
                                         </button>
 
                                     </div>
@@ -475,7 +518,7 @@ const MoviesLayout = () => {
                                                              mt-6 self-end
                                         w-fit
                                         px-5
-                                        py-2.5
+                                        py-1.5
                                         text-lg
                                         tracking-wider
                                         font-semibold
@@ -483,7 +526,7 @@ const MoviesLayout = () => {
                                         transition-all
                                         duration-100
                                         hover:text-gray-100
-                                        rounded-4xl
+                                        rounded-xl
                                         hover:bg-red-500 
                                         active:scale-95'>
                                                                 Detail <span className='bg-red-500 rounded-full w-7 h-7 p-1 font-bold'>{'->'}</span>
@@ -533,8 +576,10 @@ const MoviesLayout = () => {
 
                                     {movie && movie?.length > 0 ? (
                                         movie?.map(
-                                            (movieData) => (<MovieCards key={movieData._id} movieData={movieData} />
-
+                                            (movieData) => (
+                                            
+                                              <MovieCards key={movieData._id} movieData={movieData} />
+                                            
                                             ))):(
                                         <p className='text-sm text-gray-500 self-center'>No movies available in this city</p>
                                     )
